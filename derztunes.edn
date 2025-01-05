@@ -1,0 +1,2 @@
+{:db-uri "postgresql://postgres:postgres@localhost:5432/postgres"
+ :s3-uri "s3://minioadmin:minioadmin@localhost:9000/derztunes"}
