@@ -3,6 +3,10 @@
   (:import [io.minio ListObjectsArgs MinioClient]
            [java.net URI]))
 
+;; References:
+;; https://minio-java.min.io/overview-summary.html
+;; https://github.com/minio/minio-java/blob/release/examples/ListObjects.java
+
 (defn- parse-endpoint [s3-uri]
   (let [uri (URI. s3-uri)
         host (.getHost uri)
