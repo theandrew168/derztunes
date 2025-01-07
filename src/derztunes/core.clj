@@ -3,6 +3,11 @@
             [derztunes.s3 :as s3])
   (:gen-class))
 
+;; TODO: Add basic PG support via next.jdbc.
+;; TODO: Design the data model: track, playlist. Artist and albums eventually?
+;; TODO: Write a process to index the S3 bucket's music into the database.
+;; TODO: Write a process to import playlists (.m3u XML files).
+
 ;; TODO: Add -conf flag for specifying different config files.
 ;; TODO: Add -migrate flag for applying migrations and exiting.
 (defn -main []
