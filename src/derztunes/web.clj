@@ -1,13 +1,25 @@
 (ns derztunes.web
-  (:require [org.httpkit.server :as hk-server]))
+  (:require [compojure.core :as c]
+            [compojure.route :as route]
+            [hiccup.page :as html]
+            [org.httpkit.server :as hk-server]))
 
-(defn app [req]
-  {:status  200
-   :headers {"Content-Type" "text/html"}
-   :body    "Welcome to DerzTunes!!!"})
+(defn- index []
+  (html/html5
+   [:head
+    [:title "DerzTunes"]]
+   [:body
+    [:h1 "Welcome to DerzTunes!!!"]]))
+
+(defn- routes []
+  (c/routes
+   (c/GET "/" [] (index))
+   (route/not-found "Page not found.")))
+
+(def app (routes))
 
 (defn run-server! []
-  (hk-server/run-server #'app {:port 8080}))
+  (hk-server/run-server #'app {:ip "127.0.0.1" :port 5000}))
 
 (defn stop-server! [server]
   (server :timeout 500))
