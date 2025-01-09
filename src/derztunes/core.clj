@@ -1,14 +1,18 @@
 (ns derztunes.core
   (:require [derztunes.config :as config]
             [derztunes.db :as db]
-            [derztunes.s3 :as s3])
+            [derztunes.s3 :as s3]
+            [derztunes.web :as web])
   (:gen-class))
 
+;; TODO: Fire up a basic web serve using http-kit.
+;; TODO: Render some basic HTML using hiccup.
+;; TODO: Render a simple page of music tracks from the DB.
 ;; TODO: Design the data model: track, playlist. Artist and albums eventually?
 ;; TODO: Write a process to index the S3 bucket's music into the database.
-;; TODO: Write a process to import playlists (.m3u XML files).
 ;; TODO: Bake the bucket (from s3-uri) into the s3 client.
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
+;; TODO: Write a process to import playlists (.m3u XML files).
 
 ;; TODO: Add -conf flag for specifying different config files.
 ;; TODO: Add -migrate flag for applying migrations and exiting.
@@ -27,5 +31,8 @@
 
   (def db-client (db/connect! (config/db-uri conf)))
   (db/list-tracks! db-client)
+
+  (def web-server (web/run-server!))
+  (web/stop-server! web-server)
 
   :rcf)
