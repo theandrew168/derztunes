@@ -59,4 +59,6 @@
   (parse-credentials uri)
   (parse-bucket uri)
 
+  (def s3 (connect! uri))
+
   :rcf)
