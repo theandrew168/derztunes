@@ -1,8 +1,19 @@
 (ns derztunes.db
-  (:require [next.jdbc :as jdbc]))
+  (:require [com.stuartsierra.component :as component]
+            [next.jdbc :as jdbc]))
 
 (defn connect! [db-uri]
   (jdbc/get-datasource db-uri))
+
+(defrecord DB [conn uri]
+  component/Lifecycle
+
+  (start [this]
+    (let [conn (jdbc/get-datasource uri)]
+      (assoc this :conn conn)))
+
+  (stop [this]
+    (assoc this :conn nil)))
 
 (defn list-tracks! [db]
   (jdbc/execute! db ["SELECT * FROM track"]))

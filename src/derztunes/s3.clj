@@ -1,5 +1,6 @@
 (ns derztunes.s3
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as string]
+            [com.stuartsierra.component :as component])
   (:import [io.minio ListObjectsArgs MinioClient]
            [java.net URI]))
 
@@ -32,6 +33,16 @@
         (.endpoint endpoint)
         (.credentials (credentials :access-key) (credentials :secret-key))
         (.build))))
+
+(defrecord S3 [conn uri]
+  component/Lifecycle
+
+  (start [this]
+    (let [conn (connect! uri)]
+      (assoc this :conn conn)))
+
+  (stop [this]
+    (assoc this :conn nil)))
 
 (defn- bucket->map [bucket]
   {:name (.name bucket)})
