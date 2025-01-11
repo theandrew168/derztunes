@@ -13,6 +13,6 @@
 
   (def tracks (list-tracks! db))
   (def track (first tracks))
-  (:track/id track)
+  (get track :track/id)
 
   :rcf)

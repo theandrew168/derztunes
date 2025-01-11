@@ -6,14 +6,18 @@
 
 (defn- index []
   (html/html5
+   {:leng "en"}
    [:head
-    [:title "DerzTunes"]]
+    [:meta {:charset "utf-8"}]
+    [:title "DerzTunes"]
+    [:link {:href "/css/derztunes.css" :rel "stylesheet"}]]
    [:body
     [:h1 "Welcome to DerzTunes!!!"]]))
 
 (defn- routes []
   (c/routes
    (c/GET "/" [] (index))
+   (route/resources "/" {:root "public"})
    (route/not-found "Page not found.")))
 
 (def app (routes))

@@ -6,7 +6,6 @@
   (:gen-class))
 
 ;; TODO: Render a simple page of music tracks from the DB.
-;; TODO: Get CSS loading, rendering, and bundled into the JAR.
 ;; TODO: Design the data model: track, playlist. Artist and albums eventually?
 ;; TODO: Write a process to index the S3 bucket's music into the database.
 ;; TODO: Bake the bucket (from s3-uri) into the s3 client.
@@ -16,7 +15,8 @@
 ;; TODO: Add -conf flag for specifying different config files.
 ;; TODO: Add -migrate flag for applying migrations and exiting.
 (defn -main []
-  (println "Hello, World!"))
+  (println "Listening on port 5000...")
+  (web/run-server!))
 
 (comment
 
