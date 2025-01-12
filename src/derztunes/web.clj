@@ -1,6 +1,5 @@
 (ns derztunes.web
-  (:require [com.stuartsierra.component :as component]
-            [compojure.core :as c]
+  (:require [compojure.core :as c]
             [compojure.route :as route]
             [derztunes.db :as db]
             [hiccup.page :as html]
@@ -16,7 +15,7 @@
    [:body
     [:h1 "Welcome to DerzTunes!!!"]]))
 
-(defn- routes [db-conn s3-conn]
+(defn routes [db-conn s3-conn]
   (c/routes
    (c/GET "/" [] (index))
    (c/GET "/tracks" [] (map str (db/list-tracks! db-conn)))
@@ -28,17 +27,6 @@
 
 (defn stop-server! [server]
   (server :timeout 500))
-
-(defrecord Web [server db s3]
-  component/Lifecycle
-
-  (start [this]
-    (let [app (routes (get db :conn) (get s3 :conn))]
-      (assoc this :server (run-server! app))))
-
-  (stop [this]
-    (when server (stop-server! server))
-    (assoc this :server nil)))
 
 (comment
 

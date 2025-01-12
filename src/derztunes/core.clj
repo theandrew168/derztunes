@@ -1,9 +1,9 @@
 (ns derztunes.core
-  (:require [com.stuartsierra.component :as component]
-            [derztunes.config :as config]
+  (:require [derztunes.config :as config]
             [derztunes.db :as db]
             [derztunes.s3 :as s3]
-            [derztunes.web :as web])
+            [derztunes.web :as web]
+            [integrant.core :as ig])
   (:gen-class))
 
 ;; TODO: Design the data model: track, playlist. Artist and albums eventually?
@@ -15,28 +15,38 @@
 ;; System deps:
 ;; Web -> S3 (for fetching and streaming audio data)
 ;; Web -> DB (for listing tracks and playlists)
-(defn system [config]
-  (let [db-uri (config/db-uri config)
-        s3-uri (config/s3-uri config)]
-    (component/system-map
-     :db (db/map->DB {:uri db-uri})
-     :s3 (s3/map->S3 {:uri s3-uri})
-     :web (component/using (web/map->Web {}) [:db :s3]))))
+(defn system [conf]
+  {::db {:uri (config/db-uri conf)}
+   ::s3 {:uri (config/s3-uri conf)}
+   ::web {:db (ig/ref ::db) :s3 (ig/ref ::s3)}})
+
+(defmethod ig/init-key ::db [_ {:keys [uri]}]
+  (println "Connecting to DB...")
+  (db/connect! uri))
+
+(defmethod ig/init-key ::s3 [_ {:keys [uri]}]
+  (println "Connecting to S3...")
+  (s3/connect! uri))
+
+(defmethod ig/init-key ::web [_ {:keys [db s3]}]
+  (println "Starting web server...")
+  (web/run-server! (web/routes db s3)))
+
+(defmethod ig/halt-key! ::web [_ server]
+  (println "Stopping web server...")
+  (web/stop-server! server))
 
 ;; TODO: Add -conf flag for specifying different config files.
 ;; TODO: Add -migrate flag for applying migrations and exiting.
 (defn -main []
-  (println "Listening on port 5000...")
   (let [conf (config/from-file! "derztunes.edn")
-        sys (system conf)]
-    (component/start sys)))
+        sys (ig/init (system conf))]
+    (.addShutdownHook (Runtime/getRuntime) (Thread. #(ig/halt! sys)))))
 
 (comment
 
   (def conf (config/from-file! "derztunes.edn"))
-
-  (def sys (system conf))
-  (alter-var-root #'sys component/start)
-  (alter-var-root #'sys component/stop)
+  (def sys (ig/init (system conf)))
+  (ig/halt! sys)
 
   :rcf)

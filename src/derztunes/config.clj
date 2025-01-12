@@ -6,7 +6,7 @@
       (edn/read-string)))
 
 (defn db-uri [conf]
-  (get conf :db-uri))
+  (:db-uri conf))
 
 (defn s3-uri [conf]
-  (get conf :s3-uri))
+  (:s3-uri conf))
