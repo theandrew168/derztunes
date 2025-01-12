@@ -1,11 +1,13 @@
 (ns derztunes.s3
   (:require [clojure.string :as string])
-  (:import [io.minio ListObjectsArgs MinioClient]
+  (:import [io.minio GetPresignedObjectUrlArgs ListObjectsArgs MinioClient]
+           [io.minio.http Method]
            [java.net URI]))
 
 ;; References:
 ;; https://minio-java.min.io/overview-summary.html
 ;; https://github.com/minio/minio-java/blob/release/examples/ListObjects.java
+;; https://github.com/minio/minio-java/blob/release/examples/GetPresignedObjectUrl.java
 
 (defn- parse-endpoint [s3-uri]
   (let [uri (URI. s3-uri)
@@ -39,7 +41,7 @@
 (defn list-buckets! [client]
   (map bucket->map (.listBuckets client)))
 
-(defn- bucket->args [bucket]
+(defn- list-objects-args [bucket]
   (-> (ListObjectsArgs/builder)
       (.bucket bucket)
       (.recursive true)
@@ -51,7 +53,18 @@
    :size (.size object)})
 
 (defn list-objects! [client bucket]
-  (map #(object->map (.get %)) (.listObjects client (bucket->args bucket))))
+  (map #(object->map (.get %)) (.listObjects client (list-objects-args bucket))))
+
+(defn- get-presigned-object-url-args [bucket object]
+  (-> (GetPresignedObjectUrlArgs/builder)
+      (.method Method/GET)
+      (.bucket bucket)
+      (.object object)
+      (.expiry (* 24 60 60)) ; expires in 24 hours
+      (.build)))
+
+(defn get-signed-url [client bucket object]
+  (.getPresignedObjectUrl client (get-presigned-object-url-args bucket object)))
 
 (comment
   (def uri "s3://minioadmin:minioadmin@localhost:9000/derztunes")
@@ -60,5 +73,6 @@
   (parse-bucket uri)
 
   (def s3 (connect! uri))
+  (get-signed-url s3 "derztunes" "test.mp3")
 
   :rcf)
