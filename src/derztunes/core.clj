@@ -6,7 +6,6 @@
             [integrant.core :as ig])
   (:gen-class))
 
-;; TODO: Write a process to index the S3 bucket's music into the database.
 ;; TODO: Bake the bucket (from s3-uri) into the s3 client.
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
 ;; TODO: Add data model support for playlists.
