@@ -3,7 +3,9 @@
             [compojure.route :as route]
             [derztunes.db :as db]
             [derztunes.s3 :as s3]
+            [derztunes.track :as track]
             [hiccup.page :as html]
+            [java-time.api :as jt]
             [org.httpkit.server :as hk-server]))
 
 (defn- page-html [content]
@@ -15,10 +17,10 @@
     [:link {:href "/css/derztunes.css" :rel "stylesheet"}]]
    content))
 
-(defn- track-html [track]
+(defn- track-html [t]
   [:div
-   [:h2 (:track/name track)]
-   [:audio {:controls true :src (:track/signed-url track)}]])
+   [:h2 (track/name t)]
+   [:audio {:controls true :src (track/signed-url t)}]])
 
 (defn- index-html [tracks]
   (page-html
@@ -26,18 +28,21 @@
     [:h1 "Welcome to DerzTunes!!!"]
     (map track-html tracks)]))
 
-(defn- activate-track [db s3 track]
-  (if (:track/signed-url track)
-    track
-    (let [signed-url (s3/get-signed-url s3 "derztunes" (:track/path track))
-          track (assoc track :track/signed-url signed-url)]
-      (db/update-track! db track)
-      track)))
+;; TODO: Find a better place for this.
+(defn- activate-track! [db s3 t]
+  (if (track/signed-url t)
+    t
+    (let [expiry (* 24 60 60)
+          signed-url (s3/get-signed-url s3 "derztunes" (track/path t) expiry)
+          signed-url-expires-at (jt/plus (jt/instant) (jt/seconds expiry))
+          t (track/with-signed-url t signed-url signed-url-expires-at)]
+      (db/update-track! db t)
+      t)))
 
 (defn- index-handler [db s3]
   (fn [req]
     (let [tracks (db/list-tracks! db)
-          tracks (map #(activate-track db s3 %) tracks)]
+          tracks (map #(activate-track! db s3 %) tracks)]
       (index-html tracks))))
 
 (defn routes [db-conn s3-conn]

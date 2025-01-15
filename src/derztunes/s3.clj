@@ -35,6 +35,7 @@
         (.credentials (credentials :access-key) (credentials :secret-key))
         (.build))))
 
+;; TODO: Proper domain model for this?
 (defn- bucket->map [bucket]
   {:name (.name bucket)})
 
@@ -48,6 +49,7 @@
       (.maxKeys 100) ; TODO: Remove this when ready to go live.
       (.build)))
 
+;; TODO: Proper domain model for this?
 (defn- object->map [object]
   {:name (.objectName object)
    :size (.size object)})
@@ -55,24 +57,26 @@
 (defn list-objects! [client bucket]
   (map #(object->map (.get %)) (.listObjects client (list-objects-args bucket))))
 
-(defn- get-presigned-object-url-args [bucket object]
+;; TODO: Expiry is in seconds. How can I make that clear?
+(defn- get-presigned-object-url-args [bucket object expiry]
   (-> (GetPresignedObjectUrlArgs/builder)
       (.method Method/GET)
       (.bucket bucket)
       (.object object)
-      (.expiry (* 24 60 60)) ; expires in 24 hours
+      (.expiry expiry)
       (.build)))
 
-(defn get-signed-url [client bucket object]
-  (.getPresignedObjectUrl client (get-presigned-object-url-args bucket object)))
+(defn get-signed-url [client bucket object expiry]
+  (.getPresignedObjectUrl client (get-presigned-object-url-args bucket object expiry)))
 
 (comment
+
   (def uri "s3://minioadmin:minioadmin@localhost:9000/derztunes")
   (parse-endpoint uri)
   (parse-credentials uri)
   (parse-bucket uri)
 
   (def s3 (connect! uri))
-  (get-signed-url s3 "derztunes" "test.mp3")
+  (get-signed-url s3 "derztunes" "test.mp3" (* 24 60 60))
 
   :rcf)

@@ -6,6 +6,8 @@
             [integrant.core :as ig])
   (:gen-class))
 
+;; TODO: Add models for artist and albums.
+;; TODO: Add track number to track model.
 ;; TODO: Bake the bucket (from s3-uri) into the s3 client.
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
 ;; TODO: Add data model support for playlists.
@@ -36,6 +38,7 @@
   (web/stop-server! server))
 
 ;; TODO: Add -conf flag for specifying different config files.
+;; TODO: Add -sync flag for syncing tracks from S3.
 ;; TODO: Add -migrate flag for applying migrations and exiting.
 (defn -main []
   (let [conf (config/from-file! "derztunes.edn")

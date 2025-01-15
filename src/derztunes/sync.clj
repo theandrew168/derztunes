@@ -1,7 +1,8 @@
 (ns derztunes.sync
   (:require [clojure.string :as str]
             [derztunes.db :as db]
-            [derztunes.s3 :as s3]))
+            [derztunes.s3 :as s3]
+            [derztunes.track :as track]))
 
 ;; Given a file path in S3, return the name of the file without its extension.
 ;; TODO: Check for and remove any numeric prefixes.
@@ -12,7 +13,7 @@
 (defn- object->track [object]
   (let [path (:name object)
         name (path->name path)]
-    {:name name :path path}))
+    (track/make name path)))
 
 (defn sync-tracks! [db s3]
   (let [objects (s3/list-objects! s3 "derztunes")
@@ -30,5 +31,6 @@
   (sync-tracks! db-conn s3-conn)
 
   (path->name "derztunes/test.mp3")
+  (object->track {:name "derztunes/test.mp3"})
 
   :rcf)
