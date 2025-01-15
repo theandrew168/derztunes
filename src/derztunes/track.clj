@@ -17,6 +17,7 @@
 (defn id [track]
   (:track/id track))
 
+#_{:clj-kondo/ignore [:redefined-var]}
 (defn name [track]
   (:track/name track))
 

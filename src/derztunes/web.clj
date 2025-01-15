@@ -40,7 +40,7 @@
       t)))
 
 (defn- index-handler [db s3]
-  (fn [req]
+  (fn [_]
     (let [tracks (db/list-tracks! db)
           tracks (map #(activate-track! db s3 %) tracks)]
       (index-html tracks))))
