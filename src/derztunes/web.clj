@@ -29,20 +29,20 @@
     (map track-html tracks)]))
 
 ;; TODO: Find a better place for this.
-(defn- activate-track! [db s3 t]
+(defn- activate-track! [db-conn s3-conn t]
   (if (track/signed-url t)
     t
     (let [expiry (* 24 60 60)
-          signed-url (s3/get-signed-url s3 "derztunes" (track/path t) expiry)
+          signed-url (s3/get-signed-url s3-conn "derztunes" (track/path t) expiry)
           signed-url-expires-at (jt/plus (jt/instant) (jt/seconds expiry))
           t (track/with-signed-url t signed-url signed-url-expires-at)]
-      (db/update-track! db t)
+      (db/update-track! db-conn t)
       t)))
 
-(defn- index-handler [db s3]
+(defn- index-handler [db-conn s3-conn]
   (fn [_]
-    (let [tracks (db/list-tracks! db)
-          tracks (map #(activate-track! db s3 %) tracks)]
+    (let [tracks (db/list-tracks! db-conn)
+          tracks (map #(activate-track! db-conn s3-conn %) tracks)]
       (index-html tracks))))
 
 (defn routes [db-conn s3-conn]
