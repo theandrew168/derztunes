@@ -13,7 +13,9 @@
    [:head
     [:meta {:charset "utf-8"}]
     [:title "DerzTunes"]
-    [:link {:href "/css/derztunes.css" :rel "stylesheet"}]]
+    [:link {:href "/css/reset.css" :rel "stylesheet"}]
+    [:link {:href "/css/fonts.css" :rel "stylesheet"}]
+    [:link {:href "/css/style.css" :rel "stylesheet"}]]
    content))
 
 (defn- track-html [t]
@@ -24,8 +26,12 @@
 (defn- index-html [tracks]
   (page-html
    [:body
-    [:h1 "Welcome to DerzTunes!!!"]
-    (map track-html tracks)]))
+    [:header.header
+     [:h1 "Welcome to DerzTunes!!!"]]
+    [:main.main
+     [:div.sidebar]
+     [:div.content (map track-html tracks)]]
+    [:footer.footer "Footer"]]))
 
 ;; TODO: Find a better place for these.
 

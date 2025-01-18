@@ -1,0 +1,33 @@
+body {
+	height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+
+.header {
+	background-color: #ffaaaa;
+	height: 100px;
+}
+
+.main {
+	flex-grow: 1;
+	overflow-y: auto;
+
+	display: flex;
+	flex-direction: row;
+}
+
+.sidebar {
+	background-color: #aaffaa;
+	width: 200px;
+}
+
+.content {
+	background-color: #ffaaff;
+	flex-grow: 1;
+}
+
+.footer {
+	background-color: #aaaaff;
+	height: 50px;
+}
