@@ -13,24 +13,26 @@
    [:head
     [:meta {:charset "utf-8"}]
     [:title "DerzTunes"]
+    [:script {:src "/js/derztunes.js" :defer true}]
     [:link {:href "/css/reset.css" :rel "stylesheet"}]
     [:link {:href "/css/fonts.css" :rel "stylesheet"}]
-    [:link {:href "/css/style.css" :rel "stylesheet"}]]
+    [:link {:href "/css/derztunes.css" :rel "stylesheet"}]]
    content))
 
-(defn- track-html [t]
-  [:div
-   [:h2 (:track/name t)]
-   [:audio {:controls true :src (:track/signed-url t)}]])
+(defn- track-html [track]
+  [:li.track (:track/name track) [:audio {:src (:track/signed-url track)}]])
 
 (defn- index-html [tracks]
   (page-html
    [:body
     [:header.header
-     [:h1 "Welcome to DerzTunes!!!"]]
+     [:h1 "Welcome to DerzTunes!!!"]
+     [:div.player
+      [:button "Play/Pause"]]]
     [:main.main
-     [:div.sidebar]
-     [:div.content (map track-html tracks)]]
+     [:div.sidebar "Playlists go here!"]
+     [:div.content
+      [:ul (map track-html tracks)]]]
     [:footer.footer "Footer"]]))
 
 ;; TODO: Find a better place for these.

@@ -7,22 +7,24 @@ body {
 .header {
 	background-color: #ffaaaa;
 	height: 100px;
+	flex-shrink: 0;
 }
 
 .main {
 	flex-grow: 1;
-	overflow-y: auto;
-
+	overflow: auto;
 	display: flex;
 	flex-direction: row;
 }
 
 .sidebar {
+	overflow: auto;
 	background-color: #aaffaa;
 	width: 200px;
 }
 
 .content {
+	overflow: auto;
 	background-color: #ffaaff;
 	flex-grow: 1;
 }
@@ -30,4 +32,5 @@ body {
 .footer {
 	background-color: #aaaaff;
 	height: 50px;
+	flex-shrink: 0;
 }
