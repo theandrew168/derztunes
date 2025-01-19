@@ -8,6 +8,25 @@ body {
 	background-color: #ffaaaa;
 	height: 100px;
 	flex-shrink: 0;
+
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	align-items: center;
+}
+
+.player {
+	display: flex;
+	justify-content: center;
+}
+
+.status {
+	display: flex;
+	justify-content: center;
+}
+
+.search {
+	display: flex;
+	justify-content: center;
 }
 
 .main {
@@ -33,4 +52,23 @@ body {
 	background-color: #aaaaff;
 	height: 50px;
 	flex-shrink: 0;
+
+	display: grid;
+	grid-template-columns: 1fr 1fr 1fr;
+	align-items: center;
+}
+
+.controls {
+	display: flex;
+	justify-content: center;
+}
+
+.metadata {
+	display: flex;
+	justify-content: center;
+}
+
+.settings {
+	display: flex;
+	justify-content: center;
 }

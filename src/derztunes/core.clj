@@ -6,9 +6,8 @@
             [integrant.core :as ig])
   (:gen-class))
 
-;; TODO: Style out a rough outline of the site.
-;; TODO: Write some JS to manage the audio player.
-;; TODO: Write a simple endpoint for fetching a track's signed URL.
+;; TODO: Write a simple endpoint for fetching a track's signed URL (api.clj).
+;; TODO: Write a second sync process for track metadata (duration, artist, album, etc).
 ;; TODO: Add models for artist and albums.
 ;; TODO: Add track number to track model.
 ;; TODO: Bake the bucket (from s3-uri) into the s3 client.

@@ -26,14 +26,17 @@
   (page-html
    [:body
     [:header.header
-     [:h1 "Welcome to DerzTunes!!!"]
-     [:div.player
-      [:button "Play/Pause"]]]
+     [:div.player [:button#player "???"]]
+     [:div.status [:span#status "Status"]]
+     [:div.search [:input {:type "text" :placeholder "Search..."}]]]
     [:main.main
      [:div.sidebar "Playlists go here!"]
      [:div.content
       [:ul (map track-html tracks)]]]
-    [:footer.footer "Footer"]]))
+    [:footer.footer
+     [:div.controls "Controls"]
+     [:div.metadata "Metadata"]
+     [:div.settings "Settings"]]]))
 
 ;; TODO: Find a better place for these.
 
