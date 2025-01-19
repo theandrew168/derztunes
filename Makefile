@@ -12,9 +12,13 @@ build:
 run:
 	clj -M:run
 
+.PHONY: repl
+repl:
+	clj -M:repl
+
 .PHONY: migrate
 migrate:
-	@echo 'TODO: apply migrations'
+	psql -f resources/migration/0001_create_track_table.sql postgresql://postgres:postgres@localhost:5432/postgres
 
 .PHONY: test
 test:

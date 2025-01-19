@@ -13,6 +13,8 @@
  {:run {:main-opts ["-m" "derztunes.core"]}
   :build {:deps {io.github.clojure/tools.build {:mvn/version "0.10.6"}}
           :ns-default build}
+  :repl {:extra-deps {cider/cider-nrepl {:mvn/version "0.50.0"}}
+         :main-opts ["-m" "nrepl.cmdline" "--middleware" "[cider.nrepl/cider-middleware]"]}
   :test {:extra-paths ["test"]
          :extra-deps {io.github.cognitect-labs/test-runner {:git/tag "v0.5.1" :git/sha "dfb30dd"}}
          :main-opts ["-m" "cognitect.test-runner"]
