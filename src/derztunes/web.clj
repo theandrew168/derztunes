@@ -18,7 +18,7 @@
 (defn- track-html [track]
   [:li.track
    [:input {:type "hidden" :value (:track/id track)}]
-   (:track/name track)])
+   (:track/path track)])
 
 (defn- index-html [tracks]
   (page-html
@@ -26,7 +26,9 @@
     [:header.header
      [:div.player [:button#player "???"]]
      [:div.status [:span#status "Status"]]
-     [:div.search [:input {:type "text" :placeholder "Search..."}]]]
+     [:div.search
+      [:form {:method "GET" :action "/"}
+       [:input {:type "text" :name "q" :placeholder "Search..."}]]]]
     [:main.main
      [:div.sidebar "Playlists go here!"]
      [:div.content

@@ -48,6 +48,14 @@ body {
 	flex-grow: 1;
 }
 
+.track {
+	border-bottom: 1px solid black;
+}
+
+.track:hover {
+	cursor: pointer;
+}
+
 .footer {
 	background-color: #aaaaff;
 	height: 50px;

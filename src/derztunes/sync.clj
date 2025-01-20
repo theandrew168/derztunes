@@ -17,6 +17,7 @@
 
 (defn tracks! [db s3]
   (let [objects (s3/list-objects! s3 "derztunes")
+        objects (filter #(str/ends-with? (:name %) ".mp3") objects)
         tracks (map object->track objects)]
     (doall (map #(db/create-track! db %) tracks))))
 
