@@ -3,6 +3,14 @@ console.log("Hello from DerzTunes!");
 // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API
 
+async function getSignedURL(trackID) {
+  const response = await fetch(`/api/v1/track/${trackID}/sign`, {
+    method: "POST",
+  });
+  const data = await response.json();
+  return data.url;
+}
+
 /**
  * @type {HTMLAudioElement | null}
  */

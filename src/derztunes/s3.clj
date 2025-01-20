@@ -9,6 +9,7 @@
 ;; https://github.com/minio/minio-java/blob/release/examples/ListObjects.java
 ;; https://github.com/minio/minio-java/blob/release/examples/GetPresignedObjectUrl.java
 
+;; TODO: Support parsing URIs without explicit ports.
 (defn- parse-endpoint [s3-uri]
   (let [uri (URI. s3-uri)
         host (.getHost uri)

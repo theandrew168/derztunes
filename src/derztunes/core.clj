@@ -4,8 +4,8 @@
    [clojure.string :as str]
    [derztunes.db :as db]
    [derztunes.s3 :as s3]
-   [derztunes.sync :as sync]
-   [derztunes.web :as web])
+   [derztunes.server :as server]
+   [derztunes.sync :as sync])
   (:gen-class))
 
 ;; TODO: Write a simple endpoint for fetching a track's signed URL (api.clj).
@@ -17,6 +17,9 @@
 ;; TODO: Add data model support for playlists.
 ;; TODO: Write a process to import playlists (.m3u XML files).
 ;; TODO: Support systemd notifications for successful startups.
+;; TODO: Use HTMX for searching.
+;; TODO: Use HTMX for infinite scrolling.
+;; TODO: Determine some basic "next up" behavior (auto play).
 
 ;; System deps:
 ;; Web -> S3 (for fetching and streaming audio data)
@@ -51,19 +54,19 @@
         (sync/metadata! db-conn s3-conn)
         (println "Done syncing."))
       :else
-      (let [app (web/routes db-conn s3-conn)
-            server (web/run-server! app)]
+      (let [app (server/app db-conn s3-conn)
+            server (server/start! app)]
         (println "Starting web server...")
-        (.addShutdownHook (Runtime/getRuntime) (Thread. #(web/stop-server! server)))))))
+        (.addShutdownHook (Runtime/getRuntime) (Thread. #(server/stop! server)))))))
 
 (comment
 
   (def conf (read-config! "derztunes.edn"))
   (def db-conn (db/connect! (:db-uri conf)))
   (def s3-conn (s3/connect! (:s3-uri conf)))
-  (def app (web/routes db-conn s3-conn))
-  (def server (web/run-server! app))
-  (web/stop-server! server)
+  (def app (server/app db-conn s3-conn))
+  (def server (server/start! app))
+  (server/stop! server)
 
   (parse-flags ["-conf" "derztunes.edn" "-sync"] {})
 

@@ -5,7 +5,7 @@
             [derztunes.s3 :as s3]))
 
 ;; Given a file path in S3, return the name of the file without its extension.
-;; TODO: Check for and remove any numeric prefixes.
+;; TODO: Check for and remove any numeric prefixes (like "01" or "1-01").
 (defn- path->name [path]
   (let [name (last (str/split path #"/"))]
     (subs name 0 (- (count name) 4))))

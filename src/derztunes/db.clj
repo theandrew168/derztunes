@@ -12,6 +12,9 @@
 (defn list-tracks! [db]
   (jdbc/execute! db ["SELECT * FROM track ORDER BY path ASC"]))
 
+(defn read-track! [db id]
+  (jdbc/execute-one! db ["SELECT * FROM track WHERE id = ?" id]))
+
 (defn create-track! [db track]
   (jdbc/execute! db ["INSERT INTO track
                         (id, name, path, created_at, updated_at)
