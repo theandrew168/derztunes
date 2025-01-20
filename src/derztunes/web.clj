@@ -20,7 +20,7 @@
    [:input {:type "hidden" :value (:track/id track)}]
    (:track/path track)])
 
-(defn- index-html [tracks]
+(defn- index-html [tracks q]
   (page-html
    [:body
     [:header.header
@@ -39,6 +39,11 @@
      [:div.settings "Settings"]]]))
 
 (defn index-handler [db-conn]
-  (fn [_]
-    (let [tracks (db/list-tracks! db-conn)]
-      (index-html tracks))))
+  (fn [req]
+    (println (:params req))
+    (let [params (:params req)
+          q (:q params)
+          tracks (if q
+                   (db/search-tracks! db-conn q)
+                   (db/list-tracks! db-conn))]
+      (index-html tracks q))))

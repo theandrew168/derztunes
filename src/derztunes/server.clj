@@ -3,7 +3,8 @@
             [compojure.route :as route]
             [derztunes.api :as api]
             [derztunes.web :as web]
-            [org.httpkit.server :as hk-server]))
+            [org.httpkit.server :as hk-server]
+            [ring.middleware.defaults :as defaults]))
 
 (defn routes [db-conn s3-conn]
   (c/routes
@@ -13,7 +14,7 @@
    (route/not-found "Page not found.")))
 
 (defn app [db-conn s3-conn]
-  (routes db-conn s3-conn))
+  (defaults/wrap-defaults (routes db-conn s3-conn) defaults/api-defaults))
 
 (defn start! [app]
   (hk-server/run-server app {:ip "127.0.0.1" :port 5000}))

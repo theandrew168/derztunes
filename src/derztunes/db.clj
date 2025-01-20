@@ -12,6 +12,9 @@
 (defn list-tracks! [db]
   (jdbc/execute! db ["SELECT * FROM track ORDER BY path ASC"]))
 
+(defn search-tracks! [db q]
+  (jdbc/execute! db ["SELECT * FROM track WHERE path ILIKE ? ORDER BY path ASC" (str "%" q "%")]))
+
 (defn read-track! [db id]
   (jdbc/execute-one! db ["SELECT * FROM track WHERE id = ?" id]))
 
