@@ -15,10 +15,13 @@
         name (path->name path)]
     (model/make-track name path)))
 
-(defn sync-tracks! [db s3]
+(defn tracks! [db s3]
   (let [objects (s3/list-objects! s3 "derztunes")
         tracks (map object->track objects)]
     (doall (map #(db/create-track! db %) tracks))))
+
+(defn metadata! [db s3]
+  (println "TODO: Sync track metadata"))
 
 (comment
 
@@ -28,7 +31,7 @@
   (def s3-uri "s3://minioadmin:minioadmin@localhost:9000/derztunes")
   (def s3-conn (s3/connect! s3-uri))
 
-  (sync-tracks! db-conn s3-conn)
+  (tracks! db-conn s3-conn)
 
   (path->name "derztunes/test.mp3")
   (object->track {:name "derztunes/test.mp3"})
