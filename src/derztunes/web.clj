@@ -16,7 +16,9 @@
    content))
 
 (defn- track-html [track]
-  [:li.track (:track/name track) [:audio {:src (:track/signed-url track)}]])
+  [:li.track
+   [:input {:type "hidden" :value (:track/id track)}]
+   (:track/name track)])
 
 (defn- index-html [tracks]
   (page-html

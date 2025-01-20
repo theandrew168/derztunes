@@ -16,6 +16,7 @@
   (jdbc/execute-one! db ["SELECT * FROM track WHERE id = ?" id]))
 
 (defn create-track! [db track]
+  (println "Syncing track:" (:track/path track))
   (jdbc/execute! db ["INSERT INTO track
                         (id, name, path, created_at, updated_at)
                       VALUES
@@ -51,5 +52,6 @@
   (create-track! db (model/make-track "foo" "/path/to/foo"))
 
   (def tracks (list-tracks! db))
+  (println "Hello" "world")
 
   :rcf)

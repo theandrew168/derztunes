@@ -8,7 +8,9 @@
    [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Write a simple endpoint for fetching a track's signed URL (api.clj).
+;; TODO: Use HTMX for searching.
+;; TODO: Use HTMX for infinite scrolling.
+;; TODO: Determine some basic "next up" behavior (auto play).
 ;; TODO: Write a second sync process for track metadata (duration, artist, album, etc).
 ;; TODO: Add models for artist and albums.
 ;; TODO: Add track number to track model.
@@ -17,9 +19,6 @@
 ;; TODO: Add data model support for playlists.
 ;; TODO: Write a process to import playlists (.m3u XML files).
 ;; TODO: Support systemd notifications for successful startups.
-;; TODO: Use HTMX for searching.
-;; TODO: Use HTMX for infinite scrolling.
-;; TODO: Determine some basic "next up" behavior (auto play).
 
 ;; System deps:
 ;; Web -> S3 (for fetching and streaming audio data)
