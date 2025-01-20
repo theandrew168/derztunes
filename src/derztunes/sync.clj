@@ -15,9 +15,13 @@
         name (path->name path)]
     (model/make-track name path)))
 
+(defn- audio-file? [object]
+  (or (str/ends-with? (:name object) ".mp3")
+      (str/ends-with? (:name object) ".m4a")))
+
 (defn tracks! [db s3]
   (let [objects (s3/list-objects! s3 "derztunes")
-        objects (filter #(str/ends-with? (:name %) ".mp3") objects)
+        objects (filter audio-file? objects)
         tracks (map object->track objects)]
     (doall (map #(db/create-track! db %) tracks))))
 
