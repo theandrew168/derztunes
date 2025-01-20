@@ -28,7 +28,7 @@
      [:div.status [:span#status "Status"]]
      [:div.search
       [:form {:method "GET" :action "/"}
-       [:input {:type "text" :name "q" :placeholder "Search..."}]]]]
+       [:input {:type "text" :name "q" :value q :placeholder "Search..."}]]]]
     [:main.main
      [:div.sidebar "Playlists go here!"]
      [:div.content
