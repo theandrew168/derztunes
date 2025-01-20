@@ -35,7 +35,6 @@
         (.credentials (credentials :access-key) (credentials :secret-key))
         (.build))))
 
-;; TODO: Proper domain model for this?
 (defn- bucket->map [bucket]
   {:name (.name bucket)})
 
@@ -46,10 +45,8 @@
   (-> (ListObjectsArgs/builder)
       (.bucket bucket)
       (.recursive true)
-      (.maxKeys 100) ; TODO: Remove this when ready to go live.
       (.build)))
 
-;; TODO: Proper domain model for this?
 (defn- object->map [object]
   {:name (.objectName object)
    :size (.size object)})

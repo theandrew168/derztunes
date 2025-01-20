@@ -2,10 +2,9 @@
   (:require [clojure.tools.build.api :as b]))
 
 (def lib 'theandrew168/derztunes)
-(def version (format "0.0.%s" (b/git-count-revs nil)))
 (def class-dir "target/classes")
 (def basis (delay (b/create-basis {:project "deps.edn"})))
-(def jar-file (format "target/%s-%s.jar" (name lib) version))
+(def jar-file (format "target/%s.jar" (name lib)))
 
 (defn clean [_]
   (b/delete {:path "target"}))

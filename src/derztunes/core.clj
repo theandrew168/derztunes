@@ -16,6 +16,7 @@
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
 ;; TODO: Add data model support for playlists.
 ;; TODO: Write a process to import playlists (.m3u XML files).
+;; TODO: Support systemd notifications for successful startups.
 
 ;; System deps:
 ;; Web -> S3 (for fetching and streaming audio data)

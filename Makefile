@@ -24,6 +24,12 @@ migrate:
 test:
 	clj -M:test
 
+.PHONY: deploy
+deploy: build
+	scp target/derztunes.jar derz@derztunes.com:/tmp/derztunes.jar
+	ssh -t derz@derztunes.com sudo install /tmp/derztunes.jar /usr/local/bin/derztunes.jar
+	ssh -t derz@derztunes.com sudo systemctl restart derztunes
+
 .PHONY: clean
 clean:
 	clj -T:build clean
