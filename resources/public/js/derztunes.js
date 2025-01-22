@@ -17,22 +17,38 @@ async function getSignedURL(trackID) {
 }
 
 /**
- * @type {HTMLAudioElement | null}
+ * Will hold the currently playing track element (used for auto-play).
+ * @type {HTMLElement | null}
  */
-let audioElement = null;
+let trackElement = null;
 
-const statusText = document.querySelector("#status");
+/**
+ * @type {HTMLAudioElement}
+ */
+const audioElement = document.querySelector("#audio");
+audioElement.addEventListener("ended", () => {
+  if (trackElement === null) {
+    return;
+  }
+
+  // Get the next track element (in the current order).
+  const next = trackElement.nextElementSibling;
+  if (next === null) {
+    return;
+  }
+
+  // Simulate a click on the next track.
+  next.click();
+});
+
+const titleElement = document.querySelector("#title");
 
 // Handle what happens when a user cllcks on the play / pause button.
 const playButton = document.querySelector("#player");
 playButton.addEventListener(
   "click",
   () => {
-    if (audioElement === null) {
-      console.log("No track selected, return.");
-      return;
-    }
-
+    // Toggle the play / pause state.
     if (audioElement.paused) {
       audioElement.play();
       playButton.innerHTML = "Pause";
@@ -47,20 +63,18 @@ playButton.addEventListener(
 // Handle what happens when a user clicks on a track.
 document.querySelectorAll(".track").forEach((e) => {
   e.addEventListener("click", async (e) => {
-    if (audioElement) {
-      audioElement.pause();
-      audioElement.remove();
-    }
+    trackElement = e.target;
 
-    const input = e.target.querySelector("input");
-    const trackID = input.value;
+    const trackID = e.target.querySelector("input").value;
     const url = await getSignedURL(trackID);
 
-    audioElement = new Audio(url);
+    audioElement.src = url;
+    audioElement.load();
     audioElement.play();
 
-    const title = e.target.textContent ?? "Unknown Track";
-    statusText.innerHTML = title;
     playButton.innerHTML = "Pause";
+
+    const title = e.target.textContent ?? "Unknown Track";
+    titleElement.innerHTML = title;
   });
 });

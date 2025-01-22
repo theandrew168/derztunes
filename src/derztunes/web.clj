@@ -25,7 +25,9 @@
    [:body
     [:header.header
      [:div.player [:button#player "???"]]
-     [:div.status [:span#status "Status"]]
+     [:div.status
+      [:div#title "Click a song to play!"]
+      [:audio#audio {:controls true}]]
      [:div.search
       [:form {:method "GET" :action "/"}
        [:input {:type "text" :name "q" :value q :placeholder "Search..."}]]]]

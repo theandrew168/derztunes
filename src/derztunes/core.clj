@@ -10,7 +10,6 @@
 
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
-;; TODO: Determine some basic "next up" behavior (auto play).
 ;; TODO: Write a second sync process for track metadata (duration, artist, album, etc).
 ;; TODO: Add models for artist and albums.
 ;; TODO: Add track number to track model.

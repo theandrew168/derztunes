@@ -1,5 +1,5 @@
 (ns derztunes.s3
-  (:require [clojure.string :as string])
+  (:require [clojure.string :as str])
   (:import [io.minio GetPresignedObjectUrlArgs ListObjectsArgs MinioClient]
            [io.minio.http Method]
            [java.net URI]))
@@ -20,7 +20,7 @@
 (defn- parse-credentials [s3-uri]
   (let [uri (URI. s3-uri)
         user-info (.getUserInfo uri)
-        [access-key secret-key] (string/split user-info #":")]
+        [access-key secret-key] (str/split user-info #":")]
     {:access-key access-key :secret-key secret-key}))
 
 (defn- parse-bucket [s3-uri]

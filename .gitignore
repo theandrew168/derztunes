@@ -16,3 +16,5 @@ pom.xml.asc
 .lsp/
 .portal/
 .calva/
+*.mp3
+*.m4a
