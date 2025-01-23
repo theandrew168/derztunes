@@ -74,7 +74,7 @@ document.querySelectorAll(".track").forEach((e) => {
 
     playButton.innerHTML = "Pause";
 
-    const title = e.target.textContent ?? "Unknown Track";
+    const title = e.target?.textContent ?? "Unknown Track";
     titleElement.innerHTML = title;
   });
 });

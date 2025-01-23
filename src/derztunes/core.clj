@@ -1,7 +1,7 @@
 (ns derztunes.core
   (:require
    [clojure.edn :as edn]
-   [clojure.string :as str]
+   [derztunes.cli :as cli]
    [derztunes.db :as db]
    [derztunes.s3 :as s3]
    [derztunes.server :as server]
@@ -27,16 +27,8 @@
   (-> (slurp path)
       (edn/read-string)))
 
-(defn parse-flags [args m]
-  (let [curr (first args)
-        next (second args)]
-    (if (nil? curr) m
-        (if (or (nil? next) (str/starts-with? next "-"))
-          (recur (drop 1 args) (assoc m curr true))
-          (recur (drop 2 args) (assoc m curr next))))))
-
 (defn -main [& args]
-  (let [flags (parse-flags args {})
+  (let [flags (cli/parse-flags args {})
         conf (or (get flags "-conf") "derztunes.edn")
         conf (read-config! conf)
         db-conn (db/connect! (:db-uri conf))
@@ -65,7 +57,5 @@
   (def app (server/app db-conn s3-conn))
   (def server (server/start! app))
   (server/stop! server)
-
-  (parse-flags ["-conf" "derztunes.edn" "-sync"] {})
 
   :rcf)
