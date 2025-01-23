@@ -8,7 +8,8 @@
     (let [res (io/resource "testdata/test.mp3")
           file (io/file res)]
       (is (= (mp3/parse-metadata file)
-             {:track nil
+             {:duration 728
+              :track nil
               :title "Symphony No.6 (1st movement)"
               :artist "Ludwig van Beethoven"
               :album "www.mfiles.co.uk"

@@ -203,6 +203,14 @@
    190 "Garage Rock"
    191 "Psybient"})
 
+(defn- duration [m4a]
+  (try
+    (let [box (Path/getPath m4a "moov/mvhd")
+          duration-ms (.getDuration box)]
+      (quot duration-ms 1000))
+    (catch Exception _
+      nil)))
+
 (defn- track [m4a]
   (try
     (let [box (Path/getPath m4a "moov/udta/meta/ilst/trkn")]
@@ -252,7 +260,8 @@
 (defn parse-metadata
   [file]
   (let [m4a (IsoFile. file)]
-    {:track (track m4a)
+    {:duration (duration m4a)
+     :track (track m4a)
      :title (title m4a)
      :artist (artist m4a)
      :album (album m4a)
@@ -270,6 +279,8 @@
   (.getValue (Path/getPath m4a "moov/udta/meta/ilst/gnre"))
   (.getA (Path/getPath m4a "moov/udta/meta/ilst/trkn"))
   (.getValue (Path/getPath m4a "moov/udta/meta/ilst/©wrt"))
+
+  (.getDuration (Path/getPath m4a "moov/mvhd"))
 
   (parse-metadata (io/file res))
 

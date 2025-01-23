@@ -7,6 +7,9 @@
 ;; https://github.com/mpatric/mp3agic
 ;; https://github.com/mpatric/mp3agic-examples/blob/master/src/main/java/com/mpatric/mp3agic/app/Mp3Details.java
 
+(defn- duration [mp3]
+  (.getLengthInSeconds mp3))
+
 (defn- track [tag]
   (when-let [track (.getTrack tag)]
     (let [[a _] (str/split track "/")]
@@ -30,7 +33,8 @@
   (let [mp3 (Mp3File. file)
         tag (or (.getId3v2Tag mp3) (.getId3v1Tag mp3))]
     (if tag
-      {:track (track tag)
+      {:duration (duration mp3)
+       :track (track tag)
        :title (title tag)
        :artist (artist tag)
        :album (album tag)
