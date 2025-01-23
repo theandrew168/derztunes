@@ -15,9 +15,15 @@
         name (path->name path)]
     (model/make-track name path)))
 
+(defn- mp3-file? [name]
+  (str/ends-with? name ".mp3"))
+
+(defn- m4a-file? [name]
+  (str/ends-with? name ".m4a"))
+
 (defn- audio-file? [object]
-  (or (str/ends-with? (:name object) ".mp3")
-      (str/ends-with? (:name object) ".m4a")))
+  (let [name (:name object)]
+    (or (mp3-file? name) (m4a-file? name))))
 
 (defn tracks! [db-conn s3-conn]
   (let [objects (s3/list-objects! s3-conn "derztunes")
@@ -37,6 +43,7 @@
   (def s3-conn (s3/connect! s3-uri))
 
   (tracks! db-conn s3-conn)
+  (metadata! db-conn s3-conn)
 
   (path->name "derztunes/test.mp3")
   (object->track {:name "derztunes/test.mp3"})

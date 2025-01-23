@@ -1,13 +1,13 @@
-(ns derztunes.mp3-test
+(ns derztunes.m4a-test
   (:require [clojure.java.io :as io]
             [clojure.test :refer [deftest is testing]]
-            [derztunes.mp3 :as mp3]))
+            [derztunes.m4a :as m4a]))
 
 (deftest test-parse-metadata
   (testing "Basic metadata"
-    (let [res (io/resource "testdata/test.mp3")
+    (let [res (io/resource "testdata/test.m4a")
           file (io/file res)]
-      (is (= (mp3/parse-metadata file)
+      (is (= (m4a/parse-metadata file)
              {:track nil
               :title "Symphony No.6 (1st movement)"
               :artist "Ludwig van Beethoven"
