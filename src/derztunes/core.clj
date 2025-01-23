@@ -8,16 +8,17 @@
    [derztunes.sync :as sync])
   (:gen-class))
 
+;; TODO: Drop the track name nullable (will be nullable as title).
+;; TODO: Add track cols for duration, track, title, artist, album, and genre.
+;; TODO: Write a second sync process for track metadata (duration, artist, album, etc).
+;; TODO: Add extra metadata to the FE track table.
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
-;; TODO: Write a second sync process for track metadata (duration, artist, album, etc).
-;; TODO: Add models for artist and albums.
-;; TODO: Add track number to track model.
-;; TODO: Bake the bucket (from s3-uri) into the s3 client.
-;; TODO: Optimize PG connection handling (hikari vs c3p0)
 ;; TODO: Add data model support for playlists.
 ;; TODO: Write a process to import playlists (.m3u XML files).
 ;; TODO: Support systemd notifications for successful startups.
+;; TODO: Bake the bucket (from s3-uri) into the s3 client.
+;; TODO: Optimize PG connection handling (hikari vs c3p0)
 
 ;; System deps:
 ;; Web -> S3 (for fetching and streaming audio data)
