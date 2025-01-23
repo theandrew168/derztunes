@@ -19,13 +19,13 @@
   (or (str/ends-with? (:name object) ".mp3")
       (str/ends-with? (:name object) ".m4a")))
 
-(defn tracks! [db s3]
-  (let [objects (s3/list-objects! s3 "derztunes")
+(defn tracks! [db-conn s3-conn]
+  (let [objects (s3/list-objects! s3-conn "derztunes")
         objects (filter audio-file? objects)
         tracks (map object->track objects)]
-    (doall (map #(db/create-track! db %) tracks))))
+    (doall (map #(db/create-track! db-conn %) tracks))))
 
-(defn metadata! [db s3]
+(defn metadata! [_ _]
   (println "TODO: Sync track metadata"))
 
 (comment

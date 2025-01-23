@@ -28,7 +28,7 @@
       (edn/read-string)))
 
 (defn -main [& args]
-  (let [flags (cli/parse-flags args {})
+  (let [flags (cli/parse-flags args)
         conf (or (get flags "-conf") "derztunes.edn")
         conf (read-config! conf)
         db-conn (db/connect! (:db-uri conf))
