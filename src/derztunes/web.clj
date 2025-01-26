@@ -42,7 +42,6 @@
 
 (defn index-handler [db-conn]
   (fn [req]
-    (println (:params req))
     (let [params (:params req)
           q (:q params)
           tracks (if q

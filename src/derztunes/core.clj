@@ -1,6 +1,7 @@
 (ns derztunes.core
   (:require
    [clojure.edn :as edn]
+   [clojure.string :as str]
    [derztunes.cli :as cli]
    [derztunes.db :as db]
    [derztunes.s3 :as s3]
@@ -28,10 +29,16 @@
   (-> (slurp path)
       (edn/read-string)))
 
+(defn read-port! []
+  (let [port (System/getenv "PORT")
+        port (if (str/blank? port) "5000" port)]
+    (Integer/parseInt port)))
+
 (defn -main [& args]
   (let [flags (cli/parse-flags args)
         conf (or (get flags "-conf") "derztunes.edn")
         conf (read-config! conf)
+        port (read-port!)
         db-conn (db/connect! (:db-uri conf))
         s3-conn (s3/connect! (:s3-uri conf))]
     (cond
@@ -46,17 +53,18 @@
         (println "Done syncing."))
       :else
       (let [app (server/app db-conn s3-conn)
-            server (server/start! app)]
+            server (server/start! app port)]
         (println "Starting web server...")
         (.addShutdownHook (Runtime/getRuntime) (Thread. #(server/stop! server)))))))
 
 (comment
 
   (def conf (read-config! "derztunes.edn"))
+  (def port (read-port!))
   (def db-conn (db/connect! (:db-uri conf)))
   (def s3-conn (s3/connect! (:s3-uri conf)))
   (def app (server/app db-conn s3-conn))
-  (def server (server/start! app))
+  (def server (server/start! app port))
   (server/stop! server)
 
   :rcf)

@@ -16,8 +16,8 @@
 (defn app [db-conn s3-conn]
   (defaults/wrap-defaults (routes db-conn s3-conn) defaults/api-defaults))
 
-(defn start! [app]
-  (hk-server/run-server app {:ip "127.0.0.1" :port 5000}))
+(defn start! [app port]
+  (hk-server/run-server app {:ip "127.0.0.1" :port port}))
 
 (defn stop! [server]
   (server :timeout 500))
