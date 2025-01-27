@@ -18,7 +18,6 @@
 ;; TODO: Add data model support for playlists.
 ;; TODO: Write a process to import playlists (.m3u XML files).
 ;; TODO: Support systemd notifications for successful startups.
-;; TODO: Bake the bucket (from s3-uri) into the s3 client.
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
 
 ;; System deps:
@@ -36,11 +35,12 @@
 
 (defn -main [& args]
   (let [flags (cli/parse-flags args)
-        conf (or (get flags "-conf") "derztunes.edn")
-        conf (read-config! conf)
+        conf-path (or (get flags "-conf") "derztunes.edn")
+        conf (read-config! conf-path)
         port (read-port!)
         db-conn (db/connect! (:db-uri conf))
         s3-conn (s3/connect! (:s3-uri conf))]
+    (println (format "Reading config from: %s" conf-path))
     (cond
       (contains? flags "-migrate") (println "TODO: Migrate and exit")
       (contains? flags "-sync")
@@ -54,7 +54,7 @@
       :else
       (let [app (server/app db-conn s3-conn)
             server (server/start! app port)]
-        (println "Starting web server...")
+        (println (format "Starting web server on port %s...", port))
         (.addShutdownHook (Runtime/getRuntime) (Thread. #(server/stop! server)))))))
 
 (comment

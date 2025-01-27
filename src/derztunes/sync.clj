@@ -26,7 +26,7 @@
     (or (mp3-file? name) (m4a-file? name))))
 
 (defn tracks! [db-conn s3-conn]
-  (let [objects (s3/list-objects! s3-conn "derztunes")
+  (let [objects (s3/list-objects! s3-conn)
         objects (filter audio-file? objects)
         tracks (map object->track objects)]
     (doall (map #(db/create-track! db-conn %) tracks))))

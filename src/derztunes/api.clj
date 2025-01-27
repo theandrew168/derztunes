@@ -31,7 +31,7 @@
   (if (signed-url track)
     track
     (let [expiry (* 24 60 60) ;; 24 hours
-          signed-url (s3/get-signed-url s3-conn "derztunes" (:track/path track) expiry)
+          signed-url (s3/get-signed-url s3-conn (:track/path track) expiry)
           signed-url-expires-at (jt/plus (jt/instant) (jt/seconds expiry))
           track (with-signed-url track signed-url signed-url-expires-at)]
       (db/update-track! db-conn track)
