@@ -27,12 +27,10 @@
   (jdbc/execute!
    (:db/client conn)
    ["INSERT INTO track
-      (id, name, path, created_at, updated_at)
+      (id, path, created_at, updated_at)
     VALUES
-      (?, ?, ?, ?, ?)
-    ON CONFLICT (path) DO UPDATE SET name = EXCLUDED.name",
+      (?, ?, ?, ?)",
     (:track/id track)
-    (:track/name track)
     (:track/path track)
     (:track/created-at track)
     (:track/updated-at track)]))
@@ -42,16 +40,24 @@
    (:db/client conn)
    ["UPDATE track
      SET
-       name = ?,
-       path = ?,
+       track_number = ?,
+       duration = ?,
+       title = ?,
+       artist = ?,
+       album = ?,
        signed_url = ?,
        signed_url_expires_at = ?,
+       play_count = ?,
        updated_at = ?
      WHERE id = ?",
-    (:track/name track)
-    (:track/path track)
+    (:track/track-number track)
+    (:track/duration track)
+    (:track/title track)
+    (:track/artist track)
+    (:track/album track)
     (:track/signed-url track)
     (:track/signed-url-expires-at track)
+    (:track/play-count track)
     (:track/updated-at track)
     (:track/id track)]))
 
@@ -60,7 +66,7 @@
   (def uri "postgresql://postgres:postgres@localhost:5432/postgres")
   (def conn (connect! uri))
 
-  (create-track! conn (model/make-track "foo" "/path/to/foo"))
+  (create-track! conn (model/make-track "/path/to/foo"))
 
   (def tracks (list-tracks! conn))
 

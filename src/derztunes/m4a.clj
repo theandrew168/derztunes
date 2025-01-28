@@ -20,7 +20,7 @@
            duration-ms (.getDuration box)]
        (quot duration-ms 1000)))))
 
-(defn- track [m4a]
+(defn- track-number [m4a]
   (ignore-errors
    (fn []
      (let [box (Path/getPath m4a "moov/udta/meta/ilst/trkn")]
@@ -47,11 +47,11 @@
 (defn parse-metadata
   [file]
   (let [m4a (IsoFile. file)]
-    {:duration (duration m4a)
-     :track (track m4a)
-     :title (title m4a)
-     :artist (artist m4a)
-     :album (album m4a)}))
+    {:track/track-number (track-number m4a)
+     :track/duration (duration m4a)
+     :track/title (title m4a)
+     :track/artist (artist m4a)
+     :track/album (album m4a)}))
 
 (comment
 

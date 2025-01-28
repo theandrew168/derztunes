@@ -10,7 +10,7 @@
 (defn- duration [mp3]
   (.getLengthInSeconds mp3))
 
-(defn- track [tag]
+(defn- track-number [tag]
   (when-let [track (.getTrack tag)]
     (let [[a _] (str/split track "/")]
       (when a
@@ -30,11 +30,11 @@
   (let [mp3 (Mp3File. file)
         tag (or (.getId3v2Tag mp3) (.getId3v1Tag mp3))]
     (if tag
-      {:duration (duration mp3)
-       :track (track tag)
-       :title (title tag)
-       :artist (artist tag)
-       :album (album tag)}
+      {:track/track-number (track-number tag)
+       :track/duration (duration mp3)
+       :track/title (title tag)
+       :track/artist (artist tag)
+       :track/album (album tag)}
       {})))
 
 (comment

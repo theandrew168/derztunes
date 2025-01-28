@@ -10,7 +10,7 @@
   (:gen-class))
 
 ;; TODO: Drop the track name nullable (will be nullable as title).
-;; TODO: Add track cols for duration, track, title, artist, album, and genre.
+;; TODO: Add track cols for track-number, duration, title, artist, album, and play count.
 ;; TODO: Write a second sync process for track metadata (duration, artist, album, etc).
 ;; TODO: Add extra metadata to the FE track table.
 ;; TODO: Consider using Rum instead of Hiccup for HTML generation.
