@@ -25,7 +25,7 @@
   (let [objects (s3/list-objects! s3-conn)
         objects (filter audio-file? objects)
         tracks (map object->track objects)]
-    (doall (map #(db/create-track! db-conn %) tracks))))
+    (doall (pmap #(db/create-track! db-conn %) tracks))))
 
 (defn- object->file [object]
   (let [file (File/createTempFile "derztunes" nil)
@@ -51,7 +51,7 @@
 
 (defn metadata! [db-conn s3-conn]
   (let [tracks (db/list-tracks! db-conn)]
-    (doall (map #(sync-track-metadata! db-conn s3-conn %) tracks))))
+    (doall (pmap #(sync-track-metadata! db-conn s3-conn %) tracks))))
 
 (comment
 
