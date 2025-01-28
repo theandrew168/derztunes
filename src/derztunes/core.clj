@@ -50,17 +50,20 @@
         (sync/tracks! db-conn s3-conn)
         (println "Syncing metadata...")
         (sync/metadata! db-conn s3-conn)
-        (println "Done syncing."))
+        (println "Done syncing.")
+        (shutdown-agents))
       (contains? flags "-tracks")
       (do
         (println "Syncing tracks...")
         (sync/tracks! db-conn s3-conn)
-        (println "Done syncing."))
+        (println "Done syncing.")
+        (shutdown-agents))
       (contains? flags "-metadata")
       (do
         (println "Syncing metadata...")
         (sync/metadata! db-conn s3-conn)
-        (println "Done syncing."))
+        (println "Done syncing.")
+        (shutdown-agents))
       :else
       (let [app (server/app db-conn s3-conn)
             server (server/start! app port)]
