@@ -1,6 +1,6 @@
 (ns derztunes.s3
   (:require [clojure.string :as str])
-  (:import [io.minio GetPresignedObjectUrlArgs ListObjectsArgs MinioClient]
+  (:import [io.minio GetObjectArgs GetPresignedObjectUrlArgs ListObjectsArgs MinioClient]
            [io.minio.http Method]
            [java.net URI]))
 
@@ -53,6 +53,15 @@
 
 (defn list-objects! [conn]
   (map #(object->map (.get %)) (.listObjects (:s3/client conn) (list-objects-args (:s3/bucket conn)))))
+
+(defn- get-object-args [bucket path]
+  (-> (GetObjectArgs/builder)
+      (.bucket bucket)
+      (.object path)
+      (.build)))
+
+(defn get-object! [conn path]
+  (.getObject (:s3/client conn) (get-object-args (:s3/bucket conn) path)))
 
 ;; TODO: Expiry is in seconds. How can I make that clear?
 (defn- get-presigned-object-url-args [bucket object expiry]

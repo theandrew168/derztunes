@@ -2,7 +2,10 @@
   (:require [clojure.string :as str]
             [derztunes.db :as db]
             [derztunes.model :as model]
-            [derztunes.s3 :as s3]))
+            [derztunes.s3 :as s3]
+            [derztunes.m4a :as m4a]
+            [derztunes.mp3 :as mp3])
+  (:import [java.io File FileOutputStream]))
 
 (defn- object->track [object]
   (let [path (:name object)]
@@ -24,8 +27,30 @@
         tracks (map object->track objects)]
     (doall (map #(db/create-track! db-conn %) tracks))))
 
-(defn metadata! [_ _]
-  (println "TODO: Sync track metadata"))
+(defn- object->file [object]
+  (let [file (File/createTempFile "derztunes" nil)
+        stream (FileOutputStream. file)]
+    (.deleteOnExit file)
+    (.transferTo object stream)
+    file))
+
+(defn- track-metadata [path file]
+  (cond
+    (mp3-file? path) (mp3/parse-metadata file)
+    (m4a-file? path) (m4a/parse-metadata file)
+    :else {}))
+
+(defn- sync-track-metadata! [db-conn s3-conn track]
+  (let [path (:track/path track)
+        object (s3/get-object! s3-conn path)
+        file (object->file object)
+        metadata (track-metadata path file)
+        track (merge track metadata)]
+    (db/update-track! db-conn track)))
+
+(defn metadata! [db-conn s3-conn]
+  (let [tracks (db/list-tracks! db-conn)]
+    (doall (map #(sync-track-metadata! db-conn s3-conn %) tracks))))
 
 (comment
 

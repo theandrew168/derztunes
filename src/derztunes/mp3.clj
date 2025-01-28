@@ -10,11 +10,19 @@
 (defn- duration [mp3]
   (.getLengthInSeconds mp3))
 
+(defn- has-slash? [s]
+  (str/includes? s "/"))
+
+(defn- parse-track-number [s]
+  (let [[a _] (str/split s "/")] a))
+
 (defn- track-number [tag]
-  (when-let [track (.getTrack tag)]
-    (let [[a _] (str/split track "/")]
-      (when a
-        (Integer/parseInt a)))))
+  (when-let [track-number (.getTrack tag)]
+    (if (has-slash? track-number)
+      (let [track-number (parse-track-number track-number)]
+        (when track-number
+          (Integer/parseInt track-number)))
+      (Integer/parseInt track-number))))
 
 (defn- title [tag]
   (.getTitle tag))
