@@ -40,7 +40,7 @@
         port (read-port!)
         db-conn (db/connect! (:db-uri conf))
         s3-conn (s3/connect! (:s3-uri conf))]
-    (println (format "Reading config from: %s" conf-path))
+    (println (format "Reading config: %s" conf-path))
     (cond
       (contains? flags "-migrate") (println "TODO: Migrate and exit")
       (contains? flags "-sync")
