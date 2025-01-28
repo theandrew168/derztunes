@@ -1,5 +1,3 @@
-console.log("Hello from DerzTunes!");
-
 // https://developer.mozilla.org/en-US/docs/Web/API/HTMLAudioElement
 // https://developer.mozilla.org/en-US/docs/Web/API/Web_Audio_API/Using_Web_Audio_API
 
@@ -38,7 +36,8 @@ audioElement.addEventListener("ended", () => {
   }
 
   // Simulate a click on the next track.
-  next.click();
+  const title = next.querySelector("span");
+  title.click();
 });
 
 const titleElement = document.querySelector("#title");
@@ -63,9 +62,9 @@ playButton.addEventListener(
 // Handle what happens when a user clicks on a track.
 document.querySelectorAll(".track").forEach((e) => {
   e.addEventListener("click", async (e) => {
-    trackElement = e.target;
+    trackElement = e.target.parentElement;
 
-    const trackID = e.target.querySelector("input").value;
+    const trackID = trackElement?.querySelector("input").value;
     const url = await getSignedURL(trackID);
 
     audioElement.src = url;
@@ -74,7 +73,9 @@ document.querySelectorAll(".track").forEach((e) => {
 
     playButton.innerHTML = "Pause";
 
-    const title = e.target?.textContent ?? "Unknown Track";
+    const title =
+      trackElement?.querySelector("span").textContent ?? "Unknown Track";
     titleElement.innerHTML = title;
+    document.title = title;
   });
 });
