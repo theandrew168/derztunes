@@ -29,6 +29,7 @@ deploy: build
 	scp target/derztunes.jar derz@derztunes.com:/tmp/derztunes.jar
 	ssh -t derz@derztunes.com sudo install /tmp/derztunes.jar /usr/local/bin/derztunes.jar
 	ssh -t derz@derztunes.com sudo systemctl restart derztunes
+	ssh -t derz@derztunes.com sudo systemctl restart derztunes-demo
 
 .PHONY: clean
 clean:
