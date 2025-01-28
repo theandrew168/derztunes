@@ -14,7 +14,7 @@
   (str/includes? s "/"))
 
 (defn- parse-track-number [s]
-  (let [[a _] (str/split s "/")] a))
+  (let [[a _] (str/split s #"/")] a))
 
 (defn- track-number [tag]
   (when-let [track-number (.getTrack tag)]
@@ -39,7 +39,7 @@
         tag (or (.getId3v2Tag mp3) (.getId3v1Tag mp3))]
     (if tag
       {:track/track-number (track-number tag)
-       :track/duration (duration mp3)
+      ;;  :track/duration (duration mp3)
        :track/title (title tag)
        :track/artist (artist tag)
        :track/album (album tag)}
@@ -47,10 +47,9 @@
 
 (comment
 
-  (def res (io/resource "testdata/test.mp3"))
-
-  (def mp3 (Mp3File. (io/file res)))
+  (def mp3 (Mp3File. (io/file "test.mp3")))
   (.getVersion mp3)
+  (.getLengthInMilliseconds mp3)
 
   (def tag (.getId3v1Tag mp3))
   (def tag (.getId3v2Tag mp3))
@@ -59,6 +58,6 @@
   (.getAlbum tag)
   (.getTitle tag)
 
-  (parse-metadata (io/file res))
+  (parse-metadata (io/file "test.mp3"))
 
   :rcf)

@@ -9,10 +9,9 @@
    [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Drop the track name nullable (will be nullable as title).
-;; TODO: Add track cols for track-number, duration, title, artist, album, and play count.
-;; TODO: Write a second sync process for track metadata (duration, artist, album, etc).
 ;; TODO: Add extra metadata to the FE track table.
+;; TODO: Fix duration parsing for some MP3 files.
+;; TODO: Write my own metadata parsers for funsies?
 ;; TODO: Consider using Rum instead of Hiccup for HTML generation.
 ;; TODO: Consider using Reitit instead of Compojure for routing.
 ;; TODO: Use HTMX for searching.
@@ -47,9 +46,18 @@
       (contains? flags "-migrate") (println "TODO: Migrate and exit")
       (contains? flags "-sync")
       (do
-        ;; TODO: Figure out why this doesn't terminate. Something about closing streams via the Minio SDK?
         (println "Syncing tracks...")
         (sync/tracks! db-conn s3-conn)
+        (println "Syncing metadata...")
+        (sync/metadata! db-conn s3-conn)
+        (println "Done syncing."))
+      (contains? flags "-tracks")
+      (do
+        (println "Syncing tracks...")
+        (sync/tracks! db-conn s3-conn)
+        (println "Done syncing."))
+      (contains? flags "-metadata")
+      (do
         (println "Syncing metadata...")
         (sync/metadata! db-conn s3-conn)
         (println "Done syncing."))

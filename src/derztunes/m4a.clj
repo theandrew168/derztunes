@@ -48,7 +48,7 @@
   [file]
   (let [m4a (IsoFile. file)]
     {:track/track-number (track-number m4a)
-     :track/duration (duration m4a)
+    ;;  :track/duration (duration m4a)
      :track/title (title m4a)
      :track/artist (artist m4a)
      :track/album (album m4a)}))

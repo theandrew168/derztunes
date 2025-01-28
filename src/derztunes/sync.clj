@@ -41,6 +41,7 @@
     :else {}))
 
 (defn- sync-track-metadata! [db-conn s3-conn track]
+  (println "Syncing metadata:" (:track/path track))
   (let [path (:track/path track)
         object (s3/get-object! s3-conn path)
         file (object->file object)

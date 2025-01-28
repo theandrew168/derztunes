@@ -9,7 +9,6 @@
           file (io/file res)]
       (is (= (m4a/parse-metadata file)
              {:track/track-number nil
-              :track/duration 728
               :track/title "Symphony No.6 (1st movement)"
               :track/artist "Ludwig van Beethoven"
               :track/album "www.mfiles.co.uk"})))))
