@@ -13,13 +13,6 @@
     (catch Exception _
       nil)))
 
-(defn- duration [m4a]
-  (ignore-errors
-   (fn []
-     (let [box (Path/getPath m4a "moov/mvhd")
-           duration-ms (.getDuration box)]
-       (quot duration-ms 1000)))))
-
 (defn- track-number [m4a]
   (ignore-errors
    (fn []
@@ -48,7 +41,6 @@
   [file]
   (let [m4a (IsoFile. file)]
     {:track/track-number (track-number m4a)
-    ;;  :track/duration (duration m4a)
      :track/title (title m4a)
      :track/artist (artist m4a)
      :track/album (album m4a)}))
