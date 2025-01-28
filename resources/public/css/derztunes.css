@@ -38,6 +38,8 @@ body {
 }
 
 .sidebar {
+	flex-shrink: 0;
+
 	overflow: auto;
 	background-color: #aaffaa;
 	width: 200px;
@@ -46,11 +48,14 @@ body {
 .content {
 	overflow: auto;
 	background-color: #ffaaff;
-	flex-grow: 1;
 }
 
 .track {
 	border-bottom: 1px solid black;
+
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr;
+	align-items: center;
 }
 
 .track:hover {

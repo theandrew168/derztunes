@@ -18,7 +18,9 @@
 (defn- track-html [track]
   [:li.track
    [:input {:type "hidden" :value (:track/id track)}]
-   (:track/path track)])
+   [:span.title (or (:track/title track) (:track/path track))]
+   [:span.artist (or (:track/artist track) "???")]
+   [:span.album (or (:track/album track) "???")]])
 
 (defn- index-html [tracks q]
   (page-html

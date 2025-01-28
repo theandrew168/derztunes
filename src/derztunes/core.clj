@@ -12,14 +12,15 @@
 ;; TODO: Add extra metadata to the FE track table.
 ;; TODO: Fix duration parsing for some MP3 files.
 ;; TODO: Write my own metadata parsers for funsies?
-;; TODO: Consider using Rum instead of Hiccup for HTML generation.
-;; TODO: Consider using Reitit instead of Compojure for routing.
+;; TODO: Find better tracks for the demo site.
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Add data model support for playlists.
 ;; TODO: Write a process to import playlists (.m3u XML files).
 ;; TODO: Support systemd notifications for successful startups.
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
+;; TODO: Consider using Rum instead of Hiccup for HTML generation.
+;; TODO: Consider using Reitit instead of Compojure for routing.
 
 ;; System deps:
 ;; Web -> S3 (for fetching and streaming audio data)

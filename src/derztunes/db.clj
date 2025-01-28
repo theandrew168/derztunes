@@ -14,13 +14,32 @@
     {:db/client client}))
 
 (defn list-tracks! [conn]
-  (jdbc/execute! (:db/client conn) ["SELECT * FROM track ORDER BY path ASC"]))
+  (jdbc/execute!
+   (:db/client conn)
+   ["SELECT *
+     FROM track
+     ORDER BY
+       artist ASC,
+       album ASC,
+       track_number ASC,
+       id ASC"]))
 
 (defn search-tracks! [conn q]
-  (jdbc/execute! (:db/client conn) ["SELECT * FROM track WHERE path ILIKE ? ORDER BY path ASC" (str "%" q "%")]))
+  (jdbc/execute!
+   (:db/client conn)
+   ["SELECT *
+     FROM track
+     WHERE path ILIKE ?
+     ORDER BY path ASC"
+    (str "%" q "%")]))
 
 (defn read-track! [conn id]
-  (jdbc/execute-one! (:db/client conn) ["SELECT * FROM track WHERE id = ?" id]))
+  (jdbc/execute-one!
+   (:db/client conn)
+   ["SELECT *
+     FROM track
+     WHERE id = ?"
+    id]))
 
 (defn create-track! [conn track]
   (println "Syncing track:" (:track/path track))
