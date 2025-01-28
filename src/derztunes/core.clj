@@ -9,7 +9,6 @@
    [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Add extra metadata to the FE track table.
 ;; TODO: Fix duration parsing for some MP3 files.
 ;; TODO: Write my own metadata parsers for funsies?
 ;; TODO: Find better tracks for the demo site.

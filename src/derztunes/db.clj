@@ -22,6 +22,7 @@
        artist ASC,
        album ASC,
        track_number ASC,
+       title ASC,
        id ASC"]))
 
 (defn search-tracks! [conn q]
@@ -29,8 +30,17 @@
    (:db/client conn)
    ["SELECT *
      FROM track
-     WHERE path ILIKE ?
-     ORDER BY path ASC"
+     WHERE title ILIKE ?
+       OR artist ILIKE ?
+       OR album ILIKE ?
+     ORDER BY
+       artist ASC,
+       album ASC,
+       track_number ASC,
+       title ASC,
+       id ASC"
+    (str "%" q "%")
+    (str "%" q "%")
     (str "%" q "%")]))
 
 (defn read-track! [conn id]
