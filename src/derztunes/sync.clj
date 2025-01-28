@@ -30,7 +30,6 @@
 (defn- object->file [object]
   (let [file (File/createTempFile "derztunes" nil)
         stream (FileOutputStream. file)]
-    (.deleteOnExit file)
     (.transferTo object stream)
     file))
 
@@ -47,7 +46,8 @@
         file (object->file object)
         metadata (track-metadata path file)
         track (merge track metadata)]
-    (db/update-track! db-conn track)))
+    (db/update-track! db-conn track)
+    (.delete file)))
 
 (defn metadata! [db-conn s3-conn]
   (let [tracks (db/list-tracks! db-conn)]
