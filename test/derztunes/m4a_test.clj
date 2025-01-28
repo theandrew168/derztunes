@@ -12,5 +12,4 @@
               :track nil
               :title "Symphony No.6 (1st movement)"
               :artist "Ludwig van Beethoven"
-              :album "www.mfiles.co.uk"
-              :genre "Classical"})))))
+              :album "www.mfiles.co.uk"})))))

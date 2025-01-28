@@ -25,9 +25,6 @@
 (defn- album [tag]
   (.getAlbum tag))
 
-(defn- genre [tag]
-  (.getGenreDescription tag))
-
 (defn parse-metadata
   [file]
   (let [mp3 (Mp3File. file)
@@ -37,8 +34,7 @@
        :track (track tag)
        :title (title tag)
        :artist (artist tag)
-       :album (album tag)
-       :genre (genre tag)}
+       :album (album tag)}
       {})))
 
 (comment
@@ -54,7 +50,6 @@
   (.getArtist tag)
   (.getAlbum tag)
   (.getTitle tag)
-  (.getGenreDescription tag)
 
   (parse-metadata (io/file res))
 

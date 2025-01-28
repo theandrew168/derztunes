@@ -13,6 +13,8 @@
 ;; TODO: Add track cols for duration, track, title, artist, album, and genre.
 ;; TODO: Write a second sync process for track metadata (duration, artist, album, etc).
 ;; TODO: Add extra metadata to the FE track table.
+;; TODO: Consider using Rum instead of Hiccup for HTML generation.
+;; TODO: Consider using Reitit instead of Compojure for routing.
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Add data model support for playlists.
