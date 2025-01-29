@@ -13,6 +13,20 @@
   (let [client (jdbc-client! db-uri)]
     {:db/client client}))
 
+(defn create-track! [conn track]
+  (println "Syncing track:" (:track/path track))
+  (jdbc/execute!
+   (:db/client conn)
+   ["INSERT INTO track
+      (id, path, created_at, updated_at)
+    VALUES
+      (?, ?, ?, ?)
+    ON CONFLICT DO NOTHING",
+    (:track/id track)
+    (:track/path track)
+    (:track/created-at track)
+    (:track/updated-at track)]))
+
 (defn list-tracks! [conn]
   (jdbc/execute!
    (:db/client conn)
@@ -51,20 +65,6 @@
      WHERE id = ?"
     id]))
 
-(defn create-track! [conn track]
-  (println "Syncing track:" (:track/path track))
-  (jdbc/execute!
-   (:db/client conn)
-   ["INSERT INTO track
-      (id, path, created_at, updated_at)
-    VALUES
-      (?, ?, ?, ?)
-    ON CONFLICT DO NOTHING",
-    (:track/id track)
-    (:track/path track)
-    (:track/created-at track)
-    (:track/updated-at track)]))
-
 (defn update-track! [conn track]
   (jdbc/execute!
    (:db/client conn)
@@ -91,13 +91,57 @@
     (:track/updated-at track)
     (:track/id track)]))
 
+(defn create-playlist! [conn playlist]
+  (jdbc/execute!
+   (:db/client conn)
+   ["INSERT INTO playlist
+       (id, name, created_at, updated_at)
+     VALUES
+       (?, ?, ?, ?)",
+    (:playlist/id playlist)
+    (:playlist/name playlist)
+    (:playlist/created-at playlist)
+    (:playlist/updated-at playlist)]))
+
+(defn list-playlists! [conn]
+  (jdbc/execute!
+   (:db/client conn)
+   ["SELECT *
+     FROM playlist
+     ORDER BY name ASC"]))
+
+(defn create-playlist-track! [conn playlist track]
+  (jdbc/execute!
+   (:db/client conn)
+   ["INSERT INTO playlist_track
+       (playlist_id, track_id)
+     VALUES
+       (?, ?)",
+    (:playlist/id playlist)
+    (:track/id track)]))
+
+(defn list-playlist-tracks! [conn]
+  (jdbc/execute!
+   (:db/client conn)
+   ["SELECT track.*
+     FROM playlist
+     INNER JOIN playlist_track
+       ON playlist_track.playlist_id = playlist.id
+     INNER JOIN track
+       ON track.id = playlist_track.track_id
+     ORDER BY playlist_track.playlist_track_number ASC"]))
+
 (comment
 
   (def uri "postgresql://postgres:postgres@localhost:5432/postgres")
   (def conn (connect! uri))
 
   (create-track! conn (model/make-track "/path/to/foo"))
-
   (def tracks (list-tracks! conn))
+
+  (create-playlist! conn (model/make-playlist "Dan Music"))
+  (def playlists (list-playlists! conn))
+
+  (create-playlist-track! conn (first playlists) (first tracks))
 
   :rcf)

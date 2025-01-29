@@ -59,7 +59,7 @@ body {
 	flex-grow: 1;
 
 	display: grid;
-	grid-template-columns: 2fr 1fr 1fr 0.3fr;
+	grid-template-columns: 1.5fr 1fr 1fr 0.3fr;
 	align-items: center;
 }
 
@@ -92,7 +92,7 @@ body {
 	border-bottom: 1px solid black;
 
 	display: grid;
-	grid-template-columns: 2fr 1fr 1fr 0.3fr;
+	grid-template-columns: 1.5fr 1fr 1fr 0.3fr;
 	align-items: center;
 }
 

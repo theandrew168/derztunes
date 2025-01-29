@@ -9,8 +9,16 @@
      :track/created-at now
      :track/updated-at now}))
 
+(defn make-playlist [name]
+  (let [now (jt/instant)]
+    {:playlist/id (random-uuid)
+     :playlist/name name
+     :playlist/created-at now
+     :playlist/updated-at now}))
+
 (comment
 
   (make-track "/path/to/foo")
+  (make-playlist "Dan Music")
 
   :rcf)
