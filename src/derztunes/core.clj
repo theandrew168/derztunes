@@ -10,10 +10,10 @@
   (:gen-class))
 
 ;; TODO: Increment play count when a track is played (when signed).
-;; TODO: Use HTMX for searching.
-;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Add data model support for playlists.
 ;; TODO: Write a process to import playlists (.m3u XML files).
+;; TODO: Use HTMX for searching.
+;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Fix duration parsing for some MP3 files.
 ;; TODO: Write my own metadata parsers for funsies?
 ;; TODO: Find better tracks for the demo site.
@@ -21,6 +21,7 @@
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
 ;; TODO: Consider using Rum instead of Hiccup for HTML generation.
 ;; TODO: Consider using Reitit instead of Compojure for routing.
+;; TODO: Add basic prometheus metrics.
 
 ;; System deps:
 ;; Web -> S3 (for fetching and streaming audio data)
