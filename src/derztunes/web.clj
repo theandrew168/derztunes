@@ -35,14 +35,17 @@
       [:form {:method "GET" :action "/"}
        [:input {:type "text" :name "q" :value q :placeholder "Search..."}]]]]
     [:main.main
-     [:div.sidebar "Playlists go here!"]
-     [:div.content
+     [:div.content-header
+      [:span.playlist-header "Sources"]
       [:header.track-header
        [:span "Name"]
        [:span "Artist"]
        [:span "Album"]
-       [:span "Plays"]]
-      [:ul (map track-html tracks)]]]
+       [:span "Plays"]]]
+     [:div.content
+      [:div.playlists "Playlists go here!"]
+      [:div.tracks
+       [:ul (map track-html tracks)]]]]
     [:footer.footer
      [:div.controls "Controls"]
      [:div.metadata "Metadata"]

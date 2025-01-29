@@ -31,14 +31,48 @@ body {
 }
 
 .main {
+	/* Without this, a small number of tracks won't fill the screen height. */
 	flex-grow: 1;
-	overflow: auto;
+	/* Without this, the footer gets pushed offscreen. */
+	overflow: hidden;
+}
+
+.content-header {
+	display: flex;
+	flex-direction: row;
+
+	font-weight: 700;
+	border-top: 1px solid black;
+	border-bottom: 1px solid black;
+}
+
+.playlist-header {
+	/* Without this, the playlist header could get squished by the track header. */
+	flex-shrink: 0;
+
+	text-align: center;
+	width: 200px;
+}
+
+.track-header {
+	/* Without this, the track header might not fill the page width. */
+	flex-grow: 1;
+
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr 0.3fr;
+	align-items: center;
+}
+
+.content {
+	/* Without this, the track table cannot be scrolled. */
+	/* TODO: This isn't quite working because the last track gets cutoff. */
+	height: 100%;
 	display: flex;
 	flex-direction: row;
 }
 
-.sidebar {
-	/* Without this, the sidebar could get squished by the track table. */
+.playlists {
+	/* Without this, the playlists sidebar could get squished by the track table. */
 	flex-shrink: 0;
 
 	overflow: auto;
@@ -46,7 +80,7 @@ body {
 	width: 200px;
 }
 
-.content {
+.tracks {
 	/* Without this, the track table might not fill the page width. */
 	flex-grow: 1;
 
@@ -54,20 +88,11 @@ body {
 	background-color: #ffaaff;
 }
 
-.track-header {
-	font-weight: 700;
-	border-bottom: 1px solid black;
-
-	display: grid;
-	grid-template-columns: 2fr 1fr 1fr 0.2fr;
-	align-items: center;
-}
-
 .track {
 	border-bottom: 1px solid black;
 
 	display: grid;
-	grid-template-columns: 2fr 1fr 1fr 0.2fr;
+	grid-template-columns: 2fr 1fr 1fr 0.3fr;
 	align-items: center;
 }
 
