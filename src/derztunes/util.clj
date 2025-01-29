@@ -2,7 +2,7 @@
   (:require [clojure.string :as str]
             [java-time.api :as jt]))
 
-(defn basename [path]
+(defn base-name [path]
   (-> path
       (str/split #"/")
       (last)))

@@ -57,7 +57,7 @@
       (contains? flags "-import")
       (do
         (println "Importing playlist...")
-        (playlist/import! db-conn (get flags "-import") (slurp (get flags "-import"))))
+        (playlist/import! db-conn (get flags "-import")))
       :else
       (let [app (server/app db-conn s3-conn)
             server (server/start! app port)]

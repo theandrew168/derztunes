@@ -2,11 +2,11 @@
   (:require [clojure.test :refer [deftest is testing]]
             [derztunes.util :as util]))
 
-(deftest test-basename
-  (testing "Extraction of basename from a path"
-    (is (= (util/basename "/path/to/foo")
+(deftest test-base-name
+  (testing "Extraction of base name from a path"
+    (is (= (util/base-name "/path/to/foo")
            "foo"))
-    (is (= (util/basename "/path/to/foo/bar.txt")
+    (is (= (util/base-name "/path/to/foo/bar.txt")
            "bar.txt"))))
 
 (deftest test-split-ext
