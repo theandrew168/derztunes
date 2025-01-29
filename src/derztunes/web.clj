@@ -20,11 +20,12 @@
    [:input {:type "hidden" :value (:track/id track)}]
    [:span.title (or (:track/title track) (:track/path track))]
    [:span.artist (or (:track/artist track) "???")]
-   [:span.album (or (:track/album track) "???")]])
+   [:span.album (or (:track/album track) "???")]
+   [:span.play-count (or (:track/play-count track) 0)]])
 
 (defn- index-html [tracks q]
   (page-html
-   [:body
+   [:body.sans-serif
     [:header.header
      [:div.player [:button#player "???"]]
      [:div.status
@@ -36,6 +37,11 @@
     [:main.main
      [:div.sidebar "Playlists go here!"]
      [:div.content
+      [:header.track-header
+       [:span "Name"]
+       [:span "Artist"]
+       [:span "Album"]
+       [:span "Plays"]]
       [:ul (map track-html tracks)]]]
     [:footer.footer
      [:div.controls "Controls"]

@@ -54,11 +54,20 @@ body {
 	background-color: #ffaaff;
 }
 
+.track-header {
+	font-weight: 700;
+	border-bottom: 1px solid black;
+
+	display: grid;
+	grid-template-columns: 2fr 1fr 1fr 0.2fr;
+	align-items: center;
+}
+
 .track {
 	border-bottom: 1px solid black;
 
 	display: grid;
-	grid-template-columns: 2fr 1fr 1fr;
+	grid-template-columns: 2fr 1fr 1fr 0.2fr;
 	align-items: center;
 }
 

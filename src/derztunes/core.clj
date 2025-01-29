@@ -9,7 +9,6 @@
    [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Increment play count when a track is played (when signed).
 ;; TODO: Add data model support for playlists.
 ;; TODO: Write a process to import playlists (.m3u XML files).
 ;; TODO: Use HTMX for searching.
