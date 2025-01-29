@@ -4,12 +4,12 @@
    [clojure.string :as str]
    [derztunes.cli :as cli]
    [derztunes.db :as db]
+   [derztunes.playlist :as playlist]
    [derztunes.s3 :as s3]
    [derztunes.server :as server]
    [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Write a process to import playlists (.m3u XML files).
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Fix duration parsing for some MP3 files.
@@ -64,6 +64,10 @@
         (sync/metadata! db-conn s3-conn)
         (println "Done syncing.")
         (shutdown-agents))
+      (contains? flags "-import")
+      (do
+        (println "Importing playlist...")
+        (playlist/import! db-conn (get flags "-import") (slurp (get flags "-import"))))
       :else
       (let [app (server/app db-conn s3-conn)
             server (server/start! app port)]
