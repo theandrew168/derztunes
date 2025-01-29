@@ -1,29 +1,19 @@
 (ns derztunes.sync
-  (:require [clojure.string :as str]
-            [derztunes.db :as db]
+  (:require [derztunes.db :as db]
             [derztunes.model :as model]
             [derztunes.s3 :as s3]
             [derztunes.m4a :as m4a]
-            [derztunes.mp3 :as mp3])
+            [derztunes.mp3 :as mp3]
+            [derztunes.util :as util])
   (:import [java.io File FileOutputStream]))
 
 (defn- object->track [object]
-  (let [path (:name object)]
+  (let [path (:object/name object)]
     (model/make-track path)))
-
-(defn- mp3-file? [path]
-  (str/ends-with? path ".mp3"))
-
-(defn- m4a-file? [path]
-  (str/ends-with? path ".m4a"))
-
-(defn- audio-file? [object]
-  (let [path (:name object)]
-    (or (mp3-file? path) (m4a-file? path))))
 
 (defn tracks! [db-conn s3-conn]
   (let [objects (s3/list-objects! s3-conn)
-        objects (filter audio-file? objects)
+        objects (filter #(util/audio-file? (:object/name %)) objects)
         tracks (map object->track objects)]
     (doseq [track tracks]
       (db/create-track! db-conn track))))
@@ -36,8 +26,8 @@
 
 (defn- track-metadata [path file]
   (cond
-    (mp3-file? path) (mp3/parse-metadata file)
-    (m4a-file? path) (m4a/parse-metadata file)
+    (util/mp3-file? path) (mp3/parse-metadata file)
+    (util/m4a-file? path) (m4a/parse-metadata file)
     :else {}))
 
 (defn- sync-track-metadata! [db-conn s3-conn track]

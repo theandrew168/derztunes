@@ -1,8 +1,7 @@
 (ns derztunes.core
   (:require
-   [clojure.edn :as edn]
-   [clojure.string :as str]
    [derztunes.cli :as cli]
+   [derztunes.config :as config]
    [derztunes.db :as db]
    [derztunes.playlist :as playlist]
    [derztunes.s3 :as s3]
@@ -25,20 +24,11 @@
 ;; Web -> S3 (for fetching and streaming audio data)
 ;; Web -> DB (for listing tracks and playlists)
 
-(defn read-config! [path]
-  (-> (slurp path)
-      (edn/read-string)))
-
-(defn read-port! []
-  (let [port (System/getenv "PORT")
-        port (if (str/blank? port) "5000" port)]
-    (Integer/parseInt port)))
-
 (defn -main [& args]
   (let [flags (cli/parse-flags args)
         conf-path (or (get flags "-conf") "derztunes.edn")
-        conf (read-config! conf-path)
-        port (read-port!)
+        conf (config/read-file! conf-path)
+        port (config/read-port!)
         db-conn (db/connect! (:db-uri conf))
         s3-conn (s3/connect! (:s3-uri conf))]
     (println (format "Reading config: %s" conf-path))
@@ -76,8 +66,8 @@
 
 (comment
 
-  (def conf (read-config! "derztunes.edn"))
-  (def port (read-port!))
+  (def conf (config/read-file! "derztunes.edn"))
+  (def port (config/read-port!))
   (def db-conn (db/connect! (:db-uri conf)))
   (def s3-conn (s3/connect! (:s3-uri conf)))
   (def app (server/app db-conn s3-conn))

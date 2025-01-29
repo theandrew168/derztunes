@@ -9,12 +9,13 @@
 ;; https://github.com/minio/minio-java/blob/release/examples/ListObjects.java
 ;; https://github.com/minio/minio-java/blob/release/examples/GetPresignedObjectUrl.java
 
-;; TODO: Support parsing URIs without explicit ports.
 (defn- parse-endpoint [s3-uri]
   (let [uri (URI. s3-uri)
         host (.getHost uri)
+        scheme (if (or (= host "localhost") (= host "127.0.0.1")) "http" "https")
+        default-port (if (= scheme "http") 80 443)
         port (.getPort uri)
-        scheme (if (or (= host "localhost") (= host "127.0.0.1")) "http" "https")]
+        port (if (= port -1) default-port port)]
     (format "%s://%s:%s" scheme host port)))
 
 (defn- parse-credentials [s3-uri]
@@ -31,7 +32,7 @@
 (defn- minio-client! [endpoint credentials]
   (-> (MinioClient/builder)
       (.endpoint endpoint)
-      (.credentials (credentials :access-key) (credentials :secret-key))
+      (.credentials (:access-key credentials) (:secret-key credentials))
       (.build)))
 
 (defn connect! [s3-uri]
@@ -48,8 +49,8 @@
       (.build)))
 
 (defn- object->map [object]
-  {:name (.objectName object)
-   :size (.size object)})
+  {:object/name (.objectName object)
+   :object/size (.size object)})
 
 (defn list-objects! [conn]
   (map #(object->map (.get %)) (.listObjects (:s3/client conn) (list-objects-args (:s3/bucket conn)))))
