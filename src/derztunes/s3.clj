@@ -83,6 +83,7 @@
   (parse-bucket uri)
 
   (def conn (connect! uri))
+  (list-objects! conn)
   (get-signed-url conn "test.mp3" (* 24 60 60))
 
   :rcf)

@@ -18,4 +18,5 @@ pom.xml.asc
 .calva/
 /*.mp3
 /*.m4a
+/*.m3u
 /*.local.edn

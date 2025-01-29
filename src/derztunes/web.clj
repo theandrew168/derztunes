@@ -29,6 +29,7 @@
     [:header.header
      [:div.player [:button#player "???"]]
      [:div.status
+      [:a {:href "/"} "DerzTunes"]
       [:div#title "Click a song to play!"]
       [:audio#audio {:controls true}]]
      [:div.search

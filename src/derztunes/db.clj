@@ -65,6 +65,14 @@
      WHERE id = ?"
     id]))
 
+(defn read-track-by-path! [conn path]
+  (jdbc/execute-one!
+   (:db/client conn)
+   ["SELECT *
+     FROM track
+     WHERE path = ?"
+    path]))
+
 (defn update-track! [conn track]
   (jdbc/execute!
    (:db/client conn)
@@ -97,7 +105,8 @@
    ["INSERT INTO playlist
        (id, name, created_at, updated_at)
      VALUES
-       (?, ?, ?, ?)",
+       (?, ?, ?, ?)
+     ON CONFLICT DO NOTHING",
     (:playlist/id playlist)
     (:playlist/name playlist)
     (:playlist/created-at playlist)
@@ -110,13 +119,30 @@
      FROM playlist
      ORDER BY name ASC"]))
 
+(defn read-playlist! [conn id]
+  (jdbc/execute-one!
+   (:db/client conn)
+   ["SELECT *
+     FROM playlist
+     WHERE id = ?"
+    id]))
+
+(defn read-playlist-by-name! [conn name]
+  (jdbc/execute-one!
+   (:db/client conn)
+   ["SELECT *
+     FROM playlist
+     WHERE name = ?"
+    name]))
+
 (defn create-playlist-track! [conn playlist track]
   (jdbc/execute!
    (:db/client conn)
    ["INSERT INTO playlist_track
        (playlist_id, track_id)
      VALUES
-       (?, ?)",
+       (?, ?)
+     ON CONFLICT DO NOTHING",
     (:playlist/id playlist)
     (:track/id track)]))
 
