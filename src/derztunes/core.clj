@@ -9,9 +9,7 @@
    [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Update UI to show existing playlists (and an "All Tracks" option).
-;; TODO: Update backend to support displaying playlists.
-;; TODO: Update frontend to support selecting playlists.
+;; TODO: Fix FE layout wrt track table overflow.
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Fix duration parsing for some MP3 files.

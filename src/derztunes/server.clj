@@ -9,10 +9,12 @@
 (defn routes [db-conn s3-conn]
   (c/routes
    (c/GET "/" [] (web/index-handler db-conn))
-   (c/GET "/ping" [] {:status 200
-                      :headers {"Content-Type" "text/plain"}
-                      :body "pong\n"})
-   (c/POST "/api/v1/track/:id/sign" [] (api/sign-track-handler db-conn s3-conn))
+   (c/GET "/playlist/:playlist-id" [] (web/playlist-handler db-conn))
+   (c/POST "/api/v1/track/:track-id/sign" [] (api/sign-track-handler db-conn s3-conn))
+   (c/GET "/ping" []
+     {:status 200
+      :headers {"Content-Type" "text/plain"}
+      :body "pong\n"})
    (route/resources "/" {:root "public"})
    (route/not-found "Page not found.")))
 

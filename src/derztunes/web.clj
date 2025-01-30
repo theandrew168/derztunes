@@ -23,7 +23,12 @@
    [:span.album (or (:track/album track) "???")]
    [:span.play-count (or (:track/play-count track) 0)]])
 
-(defn- index-html [tracks q]
+(defn- playlist-html [playlist]
+  [:li.playlist
+   [:a {:href (str "/playlist/" (:playlist/id playlist))}
+    [:div (:playlist/name playlist)]]])
+
+(defn- index-html [q tracks playlists]
   (page-html
    [:body.sans-serif
     [:header.header
@@ -33,7 +38,7 @@
       [:div#title "Click a song to play!"]
       [:audio#audio {:controls true}]]
      [:div.search
-      [:form {:method "GET" :action "/"}
+      [:form {:method "GET" :action "?"}
        [:input {:type "text" :name "q" :value q :placeholder "Search..."}]]]]
     [:main.main
      [:div.content-header
@@ -44,7 +49,12 @@
        [:span "Album"]
        [:span "Plays"]]]
      [:div.content
-      [:div.playlists "Playlists go here!"]
+      [:div.playlists
+       [:ul
+        [:li.playlist
+         [:a {:href "/"}
+          [:div "All Tracks"]]]
+        (map playlist-html playlists)]]
       [:div.tracks
        [:ul (map track-html tracks)]]]]
     [:footer.footer
@@ -58,5 +68,18 @@
           q (:q params)
           tracks (if q
                    (db/search-tracks! db-conn q)
-                   (db/list-tracks! db-conn))]
-      (index-html tracks q))))
+                   (db/list-tracks! db-conn))
+          playlists (db/list-playlists! db-conn)]
+      (index-html q tracks playlists))))
+
+(defn playlist-handler [db-conn]
+  (fn [req]
+    (let [params (:params req)
+          q (:q params)
+          playlist-id (:playlist-id params)
+          playlist (db/read-playlist! db-conn playlist-id)
+          tracks (if q
+                   (db/search-playlist-tracks! db-conn playlist q)
+                   (db/list-playlist-tracks! db-conn playlist))
+          playlists (db/list-playlists! db-conn)]
+      (index-html q tracks playlists))))

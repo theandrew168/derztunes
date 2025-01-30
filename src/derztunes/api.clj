@@ -44,9 +44,9 @@
 
 (defn sign-track-handler [db-conn s3-conn]
   (fn [req]
-    (let [id (-> req :params :id)
-          id (parse-uuid id)
-          track (db/read-track! db-conn id)
+    (let [track-id (-> req :params :track-id)
+          track-id (parse-uuid track-id)
+          track (db/read-track! db-conn track-id)
           track (activate-track! s3-conn track)
           track (with-incremented-play-count track)]
       (db/update-track! db-conn track)

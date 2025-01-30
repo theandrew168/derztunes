@@ -21,7 +21,7 @@
       (id, path, created_at, updated_at)
     VALUES
       (?, ?, ?, ?)
-    ON CONFLICT DO NOTHING",
+    ON CONFLICT DO NOTHING"
     (:track/id track)
     (:track/path track)
     (:track/created-at track)
@@ -44,9 +44,7 @@
    (:db/client conn)
    ["SELECT *
      FROM track
-     WHERE title ILIKE ?
-       OR artist ILIKE ?
-       OR album ILIKE ?
+     WHERE (title ILIKE ? OR artist ILIKE ? OR album ILIKE ?)
      ORDER BY
        artist ASC,
        album ASC,
@@ -62,7 +60,7 @@
    (:db/client conn)
    ["SELECT *
      FROM track
-     WHERE id = ?"
+     WHERE id = UUID(?)"
     id]))
 
 (defn read-track-by-path! [conn path]
@@ -87,7 +85,7 @@
        signed_url_expires_at = ?,
        play_count = ?,
        updated_at = ?
-     WHERE id = ?",
+     WHERE id = ?"
     (:track/track-number track)
     (:track/duration track)
     (:track/title track)
@@ -106,7 +104,7 @@
        (id, name, created_at, updated_at)
      VALUES
        (?, ?, ?, ?)
-     ON CONFLICT DO NOTHING",
+     ON CONFLICT DO NOTHING"
     (:playlist/id playlist)
     (:playlist/name playlist)
     (:playlist/created-at playlist)
@@ -124,7 +122,7 @@
    (:db/client conn)
    ["SELECT *
      FROM playlist
-     WHERE id = ?"
+     WHERE id = UUID(?)"
     id]))
 
 (defn read-playlist-by-name! [conn name]
@@ -146,7 +144,7 @@
     (:playlist/id playlist)
     (:track/id track)]))
 
-(defn list-playlist-tracks! [conn]
+(defn list-playlist-tracks! [conn playlist]
   (jdbc/execute!
    (:db/client conn)
    ["SELECT track.*
@@ -155,7 +153,26 @@
        ON playlist_track.playlist_id = playlist.id
      INNER JOIN track
        ON track.id = playlist_track.track_id
-     ORDER BY playlist_track.playlist_track_number ASC"]))
+     WHERE playlist.id = UUID(?)
+     ORDER BY playlist_track.playlist_track_number ASC"
+    (:playlist/id playlist)]))
+
+(defn search-playlist-tracks! [conn playlist q]
+  (jdbc/execute!
+   (:db/client conn)
+   ["SELECT track.*
+     FROM playlist
+     INNER JOIN playlist_track
+       ON playlist_track.playlist_id = playlist.id
+     INNER JOIN track
+       ON track.id = playlist_track.track_id
+     WHERE playlist.id = UUID(?)
+       AND (track.title ILIKE ? OR track.artist ILIKE ? OR track.album ILIKE ?)
+     ORDER BY playlist_track.playlist_track_number ASC"
+    (:playlist/id playlist)
+    (str "%" q "%")
+    (str "%" q "%")
+    (str "%" q "%")]))
 
 (comment
 
