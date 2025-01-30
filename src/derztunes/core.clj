@@ -9,6 +9,7 @@
    [derztunes.sync :as sync])
   (:gen-class))
 
+;; TODO: Add support for in-project migrations.
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Fix duration parsing for some MP3 files.

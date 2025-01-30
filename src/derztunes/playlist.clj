@@ -14,7 +14,9 @@
       (doseq [path paths]
         (println "Importing:" path)
         (let [track (db/read-track-by-path! db-conn path)]
-          (db/create-playlist-track! db-conn playlist track))))))
+          (if track
+            (db/create-playlist-track! db-conn playlist track)
+            (println "Track not found:" path)))))))
 
 (comment
 
