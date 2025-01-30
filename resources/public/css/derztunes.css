@@ -65,8 +65,8 @@ body {
 
 .content {
 	/* Without this, the track table cannot be scrolled. */
-	/* TODO: This isn't quite working because the last track gets cutoff. */
 	height: 100%;
+
 	display: flex;
 	flex-direction: row;
 }
@@ -75,7 +75,9 @@ body {
 	/* Without this, the playlists sidebar could get squished by the track table. */
 	flex-shrink: 0;
 
+	/* Without this, the playlist table cannot be scrolled. */
 	overflow: auto;
+
 	background-color: #aaffaa;
 	width: 200px;
 }
@@ -84,7 +86,9 @@ body {
 	/* Without this, the track table might not fill the page width. */
 	flex-grow: 1;
 
+	/* Without this, the track table cannot be scrolled. */
 	overflow: auto;
+
 	background-color: #ffaaff;
 }
 

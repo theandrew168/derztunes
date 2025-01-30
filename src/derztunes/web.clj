@@ -40,14 +40,14 @@
      [:div.search
       [:form {:method "GET" :action "?"}
        [:input {:type "text" :name "q" :value q :placeholder "Search..."}]]]]
+    [:div.content-header
+     [:span.playlist-header "Sources"]
+     [:span.track-header
+      [:span "Name"]
+      [:span "Artist"]
+      [:span "Album"]
+      [:span "Plays"]]]
     [:main.main
-     [:div.content-header
-      [:span.playlist-header "Sources"]
-      [:header.track-header
-       [:span "Name"]
-       [:span "Artist"]
-       [:span "Album"]
-       [:span "Plays"]]]
      [:div.content
       [:div.playlists
        [:ul

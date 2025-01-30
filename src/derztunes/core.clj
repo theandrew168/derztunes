@@ -9,7 +9,6 @@
    [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Fix FE layout wrt track table overflow.
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Fix duration parsing for some MP3 files.
