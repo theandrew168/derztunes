@@ -1,5 +1,6 @@
 (ns derztunes.db
-  (:require [derztunes.model :as model]
+  (:require [derztunes.playlist :as playlist]
+            [derztunes.track :as track]
             [next.jdbc :as jdbc]
             [next.jdbc.date-time :as jdbc.date-time]
             [next.jdbc.result-set :as rs]))
@@ -179,10 +180,10 @@
   (def uri "postgresql://postgres:postgres@localhost:5432/postgres")
   (def conn (connect! uri))
 
-  (create-track! conn (model/make-track "/path/to/foo"))
+  (create-track! conn (track/make "/path/to/foo"))
   (def tracks (list-tracks! conn))
 
-  (create-playlist! conn (model/make-playlist "Dan Music"))
+  (create-playlist! conn (playlist/make "Dan Music"))
   (def playlists (list-playlists! conn))
 
   (create-playlist-track! conn (first playlists) (first tracks))

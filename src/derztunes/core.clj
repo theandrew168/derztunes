@@ -6,7 +6,7 @@
             [derztunes.playlist :as playlist]
             [derztunes.s3 :as s3]
             [derztunes.server :as server]
-            [derztunes.sync :as sync])
+            [derztunes.track :as track])
   (:gen-class))
 
 ;; TODO: Use HTMX for searching.
@@ -41,21 +41,21 @@
       (contains? flags "-sync")
       (do
         (println "Syncing tracks...")
-        (sync/tracks! db-conn s3-conn)
+        (track/sync-tracks! db-conn s3-conn)
         (println "Syncing metadata...")
-        (sync/metadata! db-conn s3-conn)
+        (track/sync-metadata! db-conn s3-conn)
         (println "Done syncing.")
         (shutdown-agents))
       (contains? flags "-tracks")
       (do
         (println "Syncing tracks...")
-        (sync/tracks! db-conn s3-conn)
+        (track/sync-tracks! db-conn s3-conn)
         (println "Done syncing.")
         (shutdown-agents))
       (contains? flags "-metadata")
       (do
         (println "Syncing metadata...")
-        (sync/metadata! db-conn s3-conn)
+        (track/sync-metadata! db-conn s3-conn)
         (println "Done syncing.")
         (shutdown-agents))
       (contains? flags "-import")

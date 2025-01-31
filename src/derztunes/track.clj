@@ -1,17 +1,25 @@
-(ns derztunes.sync
+(ns derztunes.track
   (:require [derztunes.db :as db]
-            [derztunes.model :as model]
             [derztunes.s3 :as s3]
             [derztunes.m4a :as m4a]
             [derztunes.mp3 :as mp3]
-            [derztunes.util :as util])
+            [derztunes.util :as util]
+            [java-time.api :as jt])
   (:import [java.io File FileOutputStream]))
+
+;; Not quite "pure", but "honest".
+(defn make [path]
+  (let [now (jt/instant)]
+    {:track/id (random-uuid)
+     :track/path path
+     :track/created-at now
+     :track/updated-at now}))
 
 (defn- object->track [object]
   (let [path (:object/name object)]
-    (model/make-track path)))
+    (make path)))
 
-(defn tracks! [db-conn s3-conn]
+(defn sync-tracks! [db-conn s3-conn]
   (let [objects (s3/list-objects! s3-conn)
         objects (filter #(util/audio-file? (:object/name %)) objects)
         tracks (map object->track objects)]
@@ -40,7 +48,7 @@
     (db/update-track! db-conn track)
     (.delete file)))
 
-(defn metadata! [db-conn s3-conn]
+(defn sync-metadata! [db-conn s3-conn]
   (let [tracks (db/list-tracks! db-conn)]
     (doseq [track tracks]
       (sync-track-metadata! db-conn s3-conn track))))
@@ -53,7 +61,7 @@
   (def s3-uri "s3://minioadmin:minioadmin@localhost:9000/derztunes")
   (def s3-conn (s3/connect! s3-uri))
 
-  (tracks! db-conn s3-conn)
-  (metadata! db-conn s3-conn)
+  (sync-tracks! db-conn s3-conn)
+  (sync-metadata! db-conn s3-conn)
 
   :rcf)
