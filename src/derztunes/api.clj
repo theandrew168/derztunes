@@ -1,11 +1,10 @@
 (ns derztunes.api
-  (:require
-   [clojure.data.json :as json]
-   [derztunes.db :as db]
-   [derztunes.s3 :as s3]
-   [derztunes.util :as util]
-   [java-time.api :as jt]
-   [ring.util.response :as response]))
+  (:require [clojure.data.json :as json]
+            [derztunes.db :as db]
+            [derztunes.s3 :as s3]
+            [derztunes.util :as util]
+            [java-time.api :as jt]
+            [ring.util.response :as response]))
 
 ;; Check if a given instant is within 30 minutes of the current time.
 (defn- expires-soon? [expires-at]
@@ -34,7 +33,7 @@
     track
     (let [expiry (util/hours->seconds 24)
           signed-url (s3/get-signed-url s3-conn (:track/path track) expiry)
-          signed-url-expires-at (util/seconds-from-now expiry)]
+          signed-url-expires-at (util/seconds-from-now! expiry)]
       (with-signed-url track signed-url signed-url-expires-at))))
 
 (defn- with-incremented-play-count [track]

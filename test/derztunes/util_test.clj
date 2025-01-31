@@ -1,6 +1,16 @@
 (ns derztunes.util-test
   (:require [clojure.test :refer [deftest is testing]]
-            [derztunes.util :as util]))
+            [derztunes.util :as util]
+            [java-time.api :as jt]))
+
+(deftest test-get-or
+  (testing "Getting a value from a map or a default value"
+    (is (= (util/get-or {:port "8080"} :port "5000")
+           "8080"))
+    (is (= (util/get-or {:port ""} :port "5000")
+           "5000"))
+    (is (= (util/get-or {} :port "5000")
+           "5000"))))
 
 (deftest test-base-name
   (testing "Extraction of base name from a path"
@@ -47,6 +57,17 @@
            3600))
     (is (= (util/hours->seconds 2)
            7200))))
+
+(deftest test-seconds-from
+  (testing "Seconds from a given time"
+    (let [t (jt/instant)]
+      (is (= (util/seconds-from t 60)
+             (jt/plus t (jt/seconds 60)))))))
+
+(deftest test-seconds-from-now!
+  (testing "Seconds from now"
+    (is (jt/after? (util/seconds-from-now! 60)
+                   (jt/instant)))))
 
 (deftest test-ignore-errors
   (testing "Ignoring errors"

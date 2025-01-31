@@ -1,12 +1,11 @@
 (ns derztunes.core
-  (:require
-   [derztunes.cli :as cli]
-   [derztunes.config :as config]
-   [derztunes.db :as db]
-   [derztunes.playlist :as playlist]
-   [derztunes.s3 :as s3]
-   [derztunes.server :as server]
-   [derztunes.sync :as sync])
+  (:require [derztunes.cli :as cli]
+            [derztunes.config :as config]
+            [derztunes.db :as db]
+            [derztunes.playlist :as playlist]
+            [derztunes.s3 :as s3]
+            [derztunes.server :as server]
+            [derztunes.sync :as sync])
   (:gen-class))
 
 ;; TODO: Add support for in-project migrations.
@@ -26,10 +25,11 @@
 ;; Web -> DB (for listing tracks and playlists)
 
 (defn -main [& args]
-  (let [flags (cli/parse-flags args)
+  (let [env (System/getenv)
+        flags (cli/parse-flags args)
         conf-path (or (get flags "-conf") "derztunes.edn")
         conf (config/read-file! conf-path)
-        port (config/read-port!)
+        port (config/read-port env)
         db-conn (db/connect! (:db-uri conf))
         s3-conn (s3/connect! (:s3-uri conf))]
     (println (format "Reading config: %s" conf-path))
@@ -67,8 +67,9 @@
 
 (comment
 
+  (def env (System/getenv))
   (def conf (config/read-file! "derztunes.edn"))
-  (def port (config/read-port!))
+  (def port (config/read-port env))
   (def db-conn (db/connect! (:db-uri conf)))
   (def s3-conn (s3/connect! (:s3-uri conf)))
   (def app (server/app db-conn s3-conn))

@@ -2,6 +2,10 @@
   (:require [clojure.string :as str]
             [java-time.api :as jt]))
 
+(defn get-or [m k default]
+  (let [v (get m k)]
+    (if (str/blank? v) default v)))
+
 (defn base-name [path]
   (-> path
       (str/split #"/")
@@ -29,8 +33,11 @@
 (defn hours->seconds [hours]
   (* hours 60 60))
 
-(defn seconds-from-now [seconds]
-  (jt/plus (jt/instant) (jt/seconds seconds)))
+(defn seconds-from [t seconds]
+  (jt/plus t (jt/seconds seconds)))
+
+(defn seconds-from-now! [seconds]
+  (seconds-from (jt/instant) seconds))
 
 ;; Based on:
 ;; https://stackoverflow.com/a/15715610
