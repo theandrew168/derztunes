@@ -8,10 +8,16 @@
         fields (drop 4 fields)]
     (str/join "/" fields)))
 
+(defn- enumerate-paths [m3u-paths]
+  (map-indexed (fn [i track]
+                 {:number (+ 1 i)
+                  :path (m3u-path->s3-path track)})
+               m3u-paths))
+
 (defn parse-m3u [text]
   (let [lines (str/split-lines text)
-        lines (filter #(not (str/starts-with? % "#")) lines)]
-    (map m3u-path->s3-path lines)))
+        m3u-paths (filter #(not (str/starts-with? % "#")) lines)]
+    (enumerate-paths m3u-paths)))
 
 (comment
 

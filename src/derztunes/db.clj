@@ -1,7 +1,5 @@
 (ns derztunes.db
-  (:require [derztunes.playlist :as playlist]
-            [derztunes.track :as track]
-            [next.jdbc :as jdbc]
+  (:require [next.jdbc :as jdbc]
             [next.jdbc.date-time :as jdbc.date-time]
             [next.jdbc.result-set :as rs]))
 
@@ -134,16 +132,17 @@
      WHERE name = ?"
     name]))
 
-(defn create-playlist-track! [conn playlist track]
+(defn create-playlist-track! [conn playlist track number]
   (jdbc/execute!
    (:db/client conn)
    ["INSERT INTO playlist_track
-       (playlist_id, track_id)
+       (playlist_id, track_id, playlist_track_number)
      VALUES
-       (?, ?)
+       (?, ?, ?)
      ON CONFLICT DO NOTHING",
     (:playlist/id playlist)
-    (:track/id track)]))
+    (:track/id track)
+    number]))
 
 (defn list-playlist-tracks! [conn playlist]
   (jdbc/execute!
@@ -179,13 +178,5 @@
 
   (def uri "postgresql://postgres:postgres@localhost:5432/postgres")
   (def conn (connect! uri))
-
-  (create-track! conn (track/make "/path/to/foo"))
-  (def tracks (list-tracks! conn))
-
-  (create-playlist! conn (playlist/make "Dan Music"))
-  (def playlists (list-playlists! conn))
-
-  (create-playlist-track! conn (first playlists) (first tracks))
 
   :rcf)

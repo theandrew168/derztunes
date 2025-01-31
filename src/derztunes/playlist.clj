@@ -17,13 +17,15 @@
         text (slurp m3u-path)]
     (db/create-playlist! db-conn (make name))
     (let [playlist (db/read-playlist-by-name! db-conn name)
-          paths (m3u/parse-m3u text)]
-      (doseq [path paths]
-        (println "Importing:" path)
-        (let [track (db/read-track-by-path! db-conn path)]
-          (if track
-            (db/create-playlist-track! db-conn playlist track)
-            (println "Track not found:" path)))))))
+          enumerated-paths (m3u/parse-m3u text)]
+      (doseq [enumerated-path enumerated-paths]
+        (let [number (:number enumerated-path)
+              path (:path enumerated-path)]
+          (println "Importing:" path)
+          (let [track (db/read-track-by-path! db-conn path)]
+            (if track
+              (db/create-playlist-track! db-conn playlist track number)
+              (println "Track not found:" path))))))))
 
 (comment
 
