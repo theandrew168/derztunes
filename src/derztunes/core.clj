@@ -2,13 +2,13 @@
   (:require [derztunes.cli :as cli]
             [derztunes.config :as config]
             [derztunes.db :as db]
+            [derztunes.migrate :as migrate]
             [derztunes.playlist :as playlist]
             [derztunes.s3 :as s3]
             [derztunes.server :as server]
             [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Add support for in-project migrations.
 ;; TODO: Use HTMX for searching.
 ;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Fix duration parsing for some MP3 files.
@@ -34,7 +34,10 @@
         s3-conn (s3/connect! (:s3-uri conf))]
     (println (format "Reading config: %s" conf-path))
     (cond
-      (contains? flags "-migrate") (println "TODO: Migrate and exit")
+      (contains? flags "-migrate")
+      (do
+        (println "Applying migrations...")
+        (migrate/migrate! db-conn))
       (contains? flags "-sync")
       (do
         (println "Syncing tracks...")

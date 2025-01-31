@@ -3,6 +3,13 @@
             [derztunes.util :as util]
             [java-time.api :as jt]))
 
+(deftest test-in?
+  (testing "If an item is in a collection"
+    (is (util/in? [1 2 3] 2))
+    (is (not (util/in? [1 2 3] 4)))
+    (is (util/in? #{1 2 3} 2))
+    (is (not (util/in? #{1 2 3} 4)))))
+
 (deftest test-get-or
   (testing "Getting a value from a map or a default value"
     (is (= (util/get-or {:port "8080"} :port "5000")

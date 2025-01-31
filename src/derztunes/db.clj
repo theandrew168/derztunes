@@ -18,10 +18,10 @@
   (jdbc/execute!
    (:db/client conn)
    ["INSERT INTO track
-      (id, path, created_at, updated_at)
-    VALUES
-      (?, ?, ?, ?)
-    ON CONFLICT DO NOTHING"
+       (id, path, created_at, updated_at)
+     VALUES
+       (?, ?, ?, ?)
+     ON CONFLICT DO NOTHING"
     (:track/id track)
     (:track/path track)
     (:track/created-at track)

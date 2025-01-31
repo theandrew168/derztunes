@@ -2,6 +2,9 @@
   (:require [clojure.string :as str]
             [java-time.api :as jt]))
 
+(defn in? [coll item]
+  (some #(= item %) coll))
+
 (defn get-or [m k default]
   (let [v (get m k)]
     (if (str/blank? v) default v)))
