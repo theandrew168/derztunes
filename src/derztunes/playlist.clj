@@ -19,8 +19,8 @@
     (let [playlist (db/read-playlist-by-name! db-conn name)
           enumerated-paths (m3u/parse-m3u text)]
       (doseq [enumerated-path enumerated-paths]
-        (let [number (:number enumerated-path)
-              path (:path enumerated-path)]
+        (let [number (:playlist-track/number enumerated-path)
+              path (:playlist-track/path enumerated-path)]
           (println "Importing:" path)
           (let [track (db/read-track-by-path! db-conn path)]
             (if track

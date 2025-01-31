@@ -10,8 +10,8 @@
 
 (defn- enumerate-paths [m3u-paths]
   (map-indexed (fn [i track]
-                 {:number (+ 1 i)
-                  :path (m3u-path->s3-path track)})
+                 {:playlist-track/number (+ 1 i)
+                  :playlist-track/path (m3u-path->s3-path track)})
                m3u-paths))
 
 (defn parse-m3u [text]
