@@ -4,21 +4,23 @@
             [derztunes.model :as model]
             [derztunes.util :as util]))
 
+(defn- playlist-track! [db-conn playlist playlist-track]
+  (let [number (:playlist-track/number playlist-track)
+        path (:playlist-track/path playlist-track)]
+    (println "Importing:" path)
+    (let [track (db/read-track-by-path! db-conn path)]
+      (if track
+        (db/create-playlist-track! db-conn playlist track number)
+        (println "Track not found:" path)))))
+
 (defn playlist! [db-conn m3u-path]
   (let [name (util/base-name m3u-path)
         [name _] (util/split-ext name)
         text (slurp m3u-path)]
     (db/create-playlist! db-conn (model/make-playlist name))
     (let [playlist (db/read-playlist-by-name! db-conn name)
-          enumerated-paths (m3u/parse-m3u text)]
-      (doseq [enumerated-path enumerated-paths]
-        (let [number (:playlist-track/number enumerated-path)
-              path (:playlist-track/path enumerated-path)]
-          (println "Importing:" path)
-          (let [track (db/read-track-by-path! db-conn path)]
-            (if track
-              (db/create-playlist-track! db-conn playlist track number)
-              (println "Track not found:" path))))))))
+          playlist-tracks (m3u/parse-m3u text)]
+      (doall (pmap #(playlist-track! db-conn playlist %) playlist-tracks)))))
 
 (comment
 
