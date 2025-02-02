@@ -1,0 +1,7 @@
+#EXTM3U
+#EXTINF:190,Track Foo - Foo and the Barios
+C:\Music\iTunes Music\Music\test\01 Track Foo.mp3
+#EXTINF:255,Track Bar - Foo and the Barios
+C:\Music\iTunes Music\Music\test\02 Track Bar.mp3
+#EXTINF:63,Track Baz - Foo and the Barios
+C:\Music\iTunes Music\Music\test\03 Track Baz.mp3
