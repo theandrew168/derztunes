@@ -1,21 +1,14 @@
-(ns derztunes.playlist
+(ns derztunes.import
   (:require [derztunes.m3u :as m3u]
             [derztunes.db :as db]
-            [derztunes.util :as util]
-            [java-time.api :as jt]))
+            [derztunes.model :as model]
+            [derztunes.util :as util]))
 
-(defn make [name]
-  (let [now (jt/instant)]
-    {:playlist/id (random-uuid)
-     :playlist/name name
-     :playlist/created-at now
-     :playlist/updated-at now}))
-
-(defn import! [db-conn m3u-path]
+(defn playlist! [db-conn m3u-path]
   (let [name (util/base-name m3u-path)
         [name _] (util/split-ext name)
         text (slurp m3u-path)]
-    (db/create-playlist! db-conn (make name))
+    (db/create-playlist! db-conn (model/make-playlist name))
     (let [playlist (db/read-playlist-by-name! db-conn name)
           enumerated-paths (m3u/parse-m3u text)]
       (doseq [enumerated-path enumerated-paths]
@@ -32,6 +25,6 @@
   (def db-uri "postgresql://postgres:postgres@localhost:5432/postgres")
   (def db-conn (db/connect! db-uri))
 
-  (import! db-conn "test.m3u")
+  (playlist! db-conn "test.m3u")
 
   :rcf)
