@@ -29,11 +29,12 @@
 (defn- desired-migrations [urls]
   (map url->migration urls))
 
-(defn- pending-migrations [desired applied]
+(defn pending-migrations [desired applied]
   (let [desired-names (set (map :migration/name desired))
         applied-names (set (map :migration/name applied))
-        pending-names (set/difference desired-names applied-names)]
-    (filter #(util/in? pending-names (:migration/name %)) desired)))
+        pending-names (set/difference desired-names applied-names)
+        pending (filter #(util/in? pending-names (:migration/name %)) desired)]
+    (sort-by :migration/name pending)))
 
 (defn- apply-migration! [conn migration]
   (let [name (:migration/name migration)
@@ -49,7 +50,7 @@
         desired (desired-migrations urls)
         applied (list-applied-migrations! conn)
         pending (pending-migrations desired applied)]
-    (doseq [migration (sort-by :migration/name pending)]
+    (doseq [migration pending]
       (apply-migration! conn migration))))
 
 (comment
