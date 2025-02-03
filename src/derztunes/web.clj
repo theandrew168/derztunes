@@ -43,10 +43,10 @@
     [:div.content-header
      [:span.playlist-header "Sources"]
      [:span.track-header
-      [:span "Name"]
-      [:span "Artist"]
-      [:span "Album"]
-      [:span "Plays"]]]
+      [:span.title "Name"]
+      [:span.artist "Artist"]
+      [:span.album "Album"]
+      [:span.play-count "Plays"]]]
     [:main.main
      [:div.content
       [:div.playlists

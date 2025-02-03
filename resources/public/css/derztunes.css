@@ -5,8 +5,8 @@ body {
 }
 
 .header {
-	background-color: #ffaaaa;
 	height: 100px;
+	background-color: #aaaaaa;
 	flex-shrink: 0;
 
 	display: grid;
@@ -30,6 +30,15 @@ body {
 	justify-content: center;
 }
 
+.search input {
+	border-radius: 4rem;
+	padding: 0.5rem;
+}
+
+.search input:focus {
+	outline: none;
+}
+
 .main {
 	/* Without this, a small number of tracks won't fill the screen height. */
 	flex-grow: 1;
@@ -47,54 +56,77 @@ body {
 }
 
 .playlist-header {
+	width: 200px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+
 	/* Without this, the playlist header could get squished by the track header. */
 	flex-shrink: 0;
-
-	text-align: center;
-	width: 200px;
 }
 
 .track-header {
-	/* Without this, the track header might not fill the page width. */
-	flex-grow: 1;
-
 	display: grid;
 	grid-template-columns: 1.5fr 1fr 1fr 0.3fr;
 	align-items: center;
+
+	/* Without this, the track header might not fill the page width. */
+	flex-grow: 1;
+}
+
+.track-header .title,
+.track-header .artist,
+.track-header .album,
+.track-header .play-count {
+	padding: 0.25rem;
+	border-left: 1px solid gray;
+}
+
+.track-header .title {
+	border-left: 1px solid black;
 }
 
 .content {
-	/* Without this, the track table cannot be scrolled. */
-	height: 100%;
-
 	display: flex;
 	flex-direction: row;
+
+	/* Without this, the track table cannot be scrolled. */
+	height: 100%;
 }
 
 .playlists {
+	width: 200px;
+	background-color: #e7edf6;
+
 	/* Without this, the playlists sidebar could get squished by the track table. */
 	flex-shrink: 0;
 
 	/* Without this, the playlist table cannot be scrolled. */
 	overflow: auto;
+}
 
-	background-color: #aaffaa;
-	width: 200px;
+.playlist {
+	padding: 0.25rem;
+	padding-left: 2rem;
+}
+
+.playlist a {
+	color: black;
+	text-decoration: none;
 }
 
 .tracks {
+	background-color: white;
+	/* border-left: 1px solid black; */
+
 	/* Without this, the track table might not fill the page width. */
 	flex-grow: 1;
 
 	/* Without this, the track table cannot be scrolled. */
 	overflow: auto;
-
-	background-color: #ffaaff;
 }
 
 .track {
-	border-bottom: 1px solid black;
-
 	display: grid;
 	grid-template-columns: 1.5fr 1fr 1fr 0.3fr;
 	align-items: center;
@@ -104,9 +136,31 @@ body {
 	cursor: pointer;
 }
 
+.track:nth-child(even) {
+	background-color: white;
+}
+
+.track:nth-child(odd) {
+	background-color: #eef2fd;
+}
+
+.track .title,
+.track .artist,
+.track .album,
+.track .play-count {
+	padding: 0.25rem;
+}
+
+.track .title,
+.track .artist,
+.track .album,
+.track .play-count {
+	border-left: 1px solid gray;
+}
+
 .footer {
-	background-color: #aaaaff;
 	height: 50px;
+	background-color: #aaaaaa;
 	flex-shrink: 0;
 
 	display: grid;
