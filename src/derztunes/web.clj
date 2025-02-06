@@ -32,7 +32,10 @@
   (page-html
    [:body.sans-serif
     [:header.header
-     [:div.player [:button#player "???"]]
+     [:div.player
+      [:button#prev "<"]
+      [:button#play "???"]
+      [:button#next ">"]]
      [:div.status
       [:a {:href "/"} "DerzTunes"]
       [:div#title "Click a song to play!"]

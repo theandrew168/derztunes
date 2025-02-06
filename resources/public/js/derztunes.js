@@ -20,30 +20,81 @@ async function getSignedURL(trackID) {
  */
 let trackElement = null;
 
-/**
- * @type {HTMLAudioElement}
- */
 const audioElement = document.querySelector("#audio");
-audioElement.addEventListener("ended", () => {
-  if (trackElement === null) {
+const titleElement = document.querySelector("#title");
+const playButton = document.querySelector("#play");
+const nextButton = document.querySelector("#next");
+const prevButton = document.querySelector("#prev");
+
+/**
+ * Play the currently selected track and update titles.
+ */
+async function playTrack() {
+  if (!trackElement) {
+    return;
+  }
+
+  const trackID = trackElement.querySelector("input").value;
+  const url = await getSignedURL(trackID);
+
+  audioElement.src = url;
+  audioElement.load();
+  audioElement.play();
+
+  playButton.innerHTML = "Pause";
+
+  // Grab the track's title and update the player title and page title.
+  const title =
+    trackElement.querySelector("span").textContent ?? "Unknown Track";
+  titleElement.innerHTML = title;
+  document.title = title;
+}
+
+/**
+ * Select and play the next track in the list.
+ */
+async function playNextTrack() {
+  if (!trackElement) {
     return;
   }
 
   // Get the next track element (in the current order).
   const next = trackElement.nextElementSibling;
-  if (next === null) {
+  if (!next) {
     return;
   }
 
-  // Simulate a click on the next track.
-  const title = next.querySelector("span");
-  title.click();
+  trackElement = next;
+  await playTrack();
+}
+
+/**
+ * Select and play the previous track in the list.
+ */
+async function playPrevTrack() {
+  if (!trackElement) {
+    return;
+  }
+
+  // Get the previous track element (in the current order).
+  const prev = trackElement.previousElementSibling;
+  if (!prev) {
+    return;
+  }
+
+  trackElement = prev;
+  await playTrack();
+}
+
+/**
+ * Add an event listener to handle auto-playing tracks.
+ * @type {HTMLAudioElement}
+ */
+audioElement.addEventListener("ended", async () => {
+  await playNextTrack();
 });
 
-const titleElement = document.querySelector("#title");
-
 // Handle what happens when a user cllcks on the play / pause button.
-const playButton = document.querySelector("#player");
 playButton.addEventListener(
   "click",
   () => {
@@ -59,23 +110,20 @@ playButton.addEventListener(
   false
 );
 
+// Handle what happens when a user cllcks on the "next track" button.
+nextButton.addEventListener("click", async () => {
+  await playNextTrack();
+});
+
+// Handle what happens when a user cllcks on the "prev track" button.
+prevButton.addEventListener("click", async () => {
+  await playPrevTrack();
+});
+
 // Handle what happens when a user clicks on a track.
 document.querySelectorAll(".track").forEach((e) => {
   e.addEventListener("click", async (e) => {
     trackElement = e.target.parentElement;
-
-    const trackID = trackElement?.querySelector("input").value;
-    const url = await getSignedURL(trackID);
-
-    audioElement.src = url;
-    audioElement.load();
-    audioElement.play();
-
-    playButton.innerHTML = "Pause";
-
-    const title =
-      trackElement?.querySelector("span").textContent ?? "Unknown Track";
-    titleElement.innerHTML = title;
-    document.title = title;
+    await playTrack();
   });
 });
