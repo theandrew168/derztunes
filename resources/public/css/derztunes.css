@@ -1,3 +1,9 @@
+:root {
+	--color-track-light: #ffffff;
+	--color-track-dark: #eef2fd;
+	--background-metal: linear-gradient(#c8c8c8, #8c8c8c);
+}
+
 body {
 	height: 100vh;
 	display: flex;
@@ -6,7 +12,7 @@ body {
 
 .header {
 	height: 100px;
-	background-color: #aaaaaa;
+	background: var(--background-metal);
 	flex-shrink: 0;
 
 	display: grid;
@@ -137,11 +143,11 @@ body {
 }
 
 .track:nth-child(even) {
-	background-color: white;
+	background-color: var(--color-track-light);
 }
 
 .track:nth-child(odd) {
-	background-color: #eef2fd;
+	background-color: var(--color-track-dark);
 }
 
 .track .title,
@@ -160,7 +166,7 @@ body {
 
 .footer {
 	height: 50px;
-	background-color: #aaaaaa;
+	background: var(--background-metal);
 	flex-shrink: 0;
 
 	display: grid;
