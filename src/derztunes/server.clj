@@ -4,7 +4,8 @@
             [derztunes.api :as api]
             [derztunes.web :as web]
             [org.httpkit.server :as hk-server]
-            [ring.middleware.defaults :as defaults]))
+            [ring.middleware.defaults :as defaults]
+            [ring.middleware.gzip :as gzip]))
 
 (defn routes [db-conn s3-conn]
   (c/routes
@@ -19,7 +20,9 @@
    (route/not-found "Page not found.")))
 
 (defn app [db-conn s3-conn]
-  (defaults/wrap-defaults (routes db-conn s3-conn) defaults/api-defaults))
+  (-> (routes db-conn s3-conn)
+      (defaults/wrap-defaults defaults/api-defaults)
+      (gzip/wrap-gzip)))
 
 (defn start! [app port]
   (hk-server/run-server app {:ip "127.0.0.1" :port port}))

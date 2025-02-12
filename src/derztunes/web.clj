@@ -86,3 +86,9 @@
                    (db/list-playlist-tracks! db-conn playlist))
           playlists (db/list-playlists! db-conn)]
       (index-html q tracks playlists))))
+
+(comment
+
+  (page-html "foo")
+
+  :rcf)

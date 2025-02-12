@@ -11,7 +11,6 @@
   (:gen-class))
 
 ;; TODO: Use HTMX for searching.
-;; TODO: Use HTMX for infinite scrolling.
 ;; TODO: Fix duration parsing for some MP3 files.
 ;; TODO: Write my own metadata parsers for funsies?
 ;; TODO: Find better tracks for the demo site.
