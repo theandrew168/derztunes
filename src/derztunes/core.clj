@@ -16,7 +16,6 @@
 ;; TODO: Find better tracks for the demo site.
 ;; TODO: Support systemd notifications for successful startups.
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
-;; TODO: Consider using Rum instead of Hiccup for HTML generation.
 ;; TODO: Consider using Reitit instead of Compojure for routing.
 ;; TODO: Add basic prometheus metrics.
 

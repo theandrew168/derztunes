@@ -1,11 +1,12 @@
 (ns derztunes.web
   (:require [derztunes.db :as db]
-            [hiccup.page :as html]))
+            [rum.core :as rum]))
 
-;; TODO: Split the actual handler logic into the handler? Let the -html funcs all be data?
+(defn- render [content]
+  (str "<!DOCTYPE html>" (rum/render-static-markup content)))
+
 (defn- page-html [content]
-  (html/html5
-   {:leng "en"}
+  [:html {:lang "en"}
    [:head
     [:meta {:charset "utf-8"}]
     [:title "DerzTunes"]
@@ -13,7 +14,7 @@
     [:link {:href "/css/reset.css" :rel "stylesheet"}]
     [:link {:href "/css/fonts.css" :rel "stylesheet"}]
     [:link {:href "/css/derztunes.css" :rel "stylesheet"}]]
-   content))
+   content])
 
 (defn- track-html [track]
   [:li.track
@@ -73,7 +74,7 @@
                    (db/search-tracks! db-conn q)
                    (db/list-tracks! db-conn))
           playlists (db/list-playlists! db-conn)]
-      (index-html q tracks playlists))))
+      (render (index-html q tracks playlists)))))
 
 (defn playlist-handler [db-conn]
   (fn [req]
@@ -85,7 +86,7 @@
                    (db/search-playlist-tracks! db-conn playlist q)
                    (db/list-playlist-tracks! db-conn playlist))
           playlists (db/list-playlists! db-conn)]
-      (index-html q tracks playlists))))
+      (render (index-html q tracks playlists)))))
 
 (comment
 
