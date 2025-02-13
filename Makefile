@@ -18,7 +18,11 @@ repl:
 
 .PHONY: migrate
 migrate:
-	psql -f resources/migration/0001_create_track_table.sql postgresql://postgres:postgres@localhost:5432/postgres
+	clj -M:run -migrate
+
+.PHONY: sync
+sync:
+	clj -M:run -sync
 
 .PHONY: test
 test:
