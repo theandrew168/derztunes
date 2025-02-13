@@ -10,14 +10,27 @@
             [derztunes.sync :as sync])
   (:gen-class))
 
+;; TODO: Write my own metadata parsers for MP3 files.
+;; TODO: Write my own metadata parsers for M4A files.
+;; TODO: Consider rewriting the tracks table as an HTML table.
+;; TODO: Make the track table sortable by column.
+;; TODO: Make the track table columns resizable.
 ;; TODO: Use HTMX for searching.
-;; TODO: Fix duration parsing for some MP3 files.
-;; TODO: Write my own metadata parsers for funsies?
 ;; TODO: Find better tracks for the demo site.
 ;; TODO: Support systemd notifications for successful startups.
+;; TODO: Support systemd socket activation (need to PR a fix for http-kit?).
 ;; TODO: Optimize PG connection handling (hikari vs c3p0)
 ;; TODO: Consider using Reitit instead of Compojure for routing.
 ;; TODO: Add basic prometheus metrics.
+;; TODO: Add admin page(s) for managing track metadata and playlists.
+;; TODO: Add tests for api.clj.
+;; TODO: Add tests for db.clj.
+;; TODO: Add tests for import.clj.
+;; TODO: Add tests for model.clj.
+;; TODO: Add tests for s3.clj.
+;; TODO: Add tests for server.clj.
+;; TODO: Add tests for sync.clj.
+;; TODO: Add tests for web.clj.
 
 ;; System deps:
 ;; Web -> S3 (for fetching and streaming audio data)
