@@ -29,6 +29,11 @@
    [:a {:href (str "/playlist/" (:playlist/id playlist))}
     [:div (:playlist/name playlist)]]])
 
+(defn- controls-html []
+  [:div.controls
+   [:button#shuffle "Shuffle: Off"]
+   [:button#repeat "Repeat: TODO"]])
+
 (defn- index-html [q tracks playlists]
   (page-html
    [:body.sans-serif
@@ -62,7 +67,7 @@
       [:div.tracks
        [:ul (map track-html tracks)]]]]
     [:footer.footer
-     [:div.controls "Controls"]
+     (controls-html)
      [:div.metadata "Metadata"]
      [:div.settings "Settings"]]]))
 

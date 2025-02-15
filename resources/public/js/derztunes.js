@@ -19,12 +19,19 @@ async function getSignedURL(trackID) {
  * @type {HTMLElement | null}
  */
 let trackElement = null;
+let shuffle = false;
 
+const allTracks = document.querySelectorAll(".track");
+/**
+ * @type {HTMLAudioElement}
+ */
 const audioElement = document.querySelector("#audio");
 const titleElement = document.querySelector("#title");
 const playButton = document.querySelector("#play");
 const nextButton = document.querySelector("#next");
 const prevButton = document.querySelector("#prev");
+const shuffleButton = document.querySelector("#shuffle");
+const repeatButton = document.querySelector("#repeat");
 
 /**
  * Play the currently selected track and update titles.
@@ -51,6 +58,19 @@ async function playTrack() {
 }
 
 /**
+ * Reset the player to its initial state.
+ */
+async function resetTrack() {
+  audioElement.src = "";
+  audioElement.load();
+  audioElement.pause();
+
+  playButton.innerHTML = "Play";
+  titleElement.innerHTML = "DerzTunes";
+  document.title = "DerzTunes";
+}
+
+/**
  * Select and play the next track in the list.
  */
 async function playNextTrack() {
@@ -58,9 +78,20 @@ async function playNextTrack() {
     return;
   }
 
-  // Get the next track element (in the current order).
-  const next = trackElement.nextElementSibling;
+  /**
+   * @type {HTMLElement | null}
+   */
+  let next = null;
+  if (shuffle) {
+    // If shuffling, get a random track element.
+    next = allTracks[Math.floor(Math.random() * allTracks.length)];
+  } else {
+    // Get the next track element (in the current order).
+    next = trackElement.nextElementSibling;
+  }
+
   if (!next) {
+    await resetTrack();
     return;
   }
 
@@ -70,6 +101,8 @@ async function playNextTrack() {
 
 /**
  * Select and play the previous track in the list.
+ *
+ * TODO: How does this work with shuffle? Keep a history of played tracks?
  */
 async function playPrevTrack() {
   if (!trackElement) {
@@ -79,6 +112,7 @@ async function playPrevTrack() {
   // Get the previous track element (in the current order).
   const prev = trackElement.previousElementSibling;
   if (!prev) {
+    await resetTrack();
     return;
   }
 
@@ -86,10 +120,7 @@ async function playPrevTrack() {
   await playTrack();
 }
 
-/**
- * Add an event listener to handle auto-playing tracks.
- * @type {HTMLAudioElement}
- */
+// Handle what happens when a track finishes playing.
 audioElement.addEventListener("ended", async () => {
   await playNextTrack();
 });
@@ -126,4 +157,14 @@ document.querySelectorAll(".track").forEach((e) => {
     trackElement = e.target.parentElement;
     await playTrack();
   });
+});
+
+// Handle what happens when a user clicks on the "shuffle" button.
+shuffleButton.addEventListener("click", async () => {
+  shuffle = !shuffle;
+  if (shuffle) {
+    shuffleButton.innerHTML = "Shuffle: On";
+  } else {
+    shuffleButton.innerHTML = "Shuffle: Off";
+  }
 });
