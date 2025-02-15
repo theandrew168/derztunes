@@ -21,7 +21,6 @@ async function getSignedURL(trackID) {
 let trackElement = null;
 let shuffle = false;
 
-const allTracks = document.querySelectorAll(".track");
 /**
  * @type {HTMLAudioElement}
  */
@@ -32,6 +31,7 @@ const nextButton = document.querySelector("#next");
 const prevButton = document.querySelector("#prev");
 const shuffleButton = document.querySelector("#shuffle");
 const repeatButton = document.querySelector("#repeat");
+const allTracks = document.querySelectorAll(".track");
 
 /**
  * Play the currently selected track and update titles.
