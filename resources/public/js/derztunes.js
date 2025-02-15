@@ -65,7 +65,7 @@ async function resetTrack() {
   audioElement.load();
   audioElement.pause();
 
-  playButton.innerHTML = "Play";
+  playButton.innerHTML = "???";
   titleElement.innerHTML = "DerzTunes";
   document.title = "DerzTunes";
 }
