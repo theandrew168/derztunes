@@ -10,7 +10,6 @@
             [derztunes.sync :as sync])
   (:gen-class))
 
-;; TODO: Add track size to the tracks table.
 ;; TODO: Write my own metadata parsers for MP3 files.
 ;; TODO: Write my own metadata parsers for M4A files.
 ;; TODO: Consider rewriting the tracks table as an HTML table.
@@ -58,17 +57,20 @@
         (sync/tracks! db-conn s3-conn)
         (println "Syncing metadata...")
         (sync/metadata! db-conn s3-conn)
-        (println "Done syncing."))
+        (println "Done syncing.")
+        (shutdown-agents))
       (contains? flags "-tracks")
       (do
         (println "Syncing tracks...")
         (sync/tracks! db-conn s3-conn)
-        (println "Done syncing."))
+        (println "Done syncing.")
+        (shutdown-agents))
       (contains? flags "-metadata")
       (do
         (println "Syncing metadata...")
         (sync/metadata! db-conn s3-conn)
-        (println "Done syncing."))
+        (println "Done syncing.")
+        (shutdown-agents))
       (contains? flags "-import")
       (do
         (println "Importing playlist...")

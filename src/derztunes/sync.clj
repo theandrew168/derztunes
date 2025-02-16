@@ -12,11 +12,16 @@
         size (:object/size object)]
     (model/make-track path size)))
 
+;; Action: List objects (tracks) in S3
+;; Calculation: Filter objects down to audio files
+;; Calculation: Convert objects to tracks
+;; Action: Create/update tracks in the DB
+
 (defn tracks! [db-conn s3-conn]
   (let [objects (s3/list-objects! s3-conn)
         objects (filter #(util/audio-file? (:object/name %)) objects)
         tracks (map object->track objects)]
-    (pmap #(db/create-track! db-conn %) tracks)))
+    (doall (pmap #(db/create-track! db-conn %) tracks))))
 
 (defn- object->file [object]
   (let [file (File/createTempFile "derztunes" nil)
@@ -30,6 +35,12 @@
     (util/m4a-file? path) (m4a/parse-metadata file)
     :else {}))
 
+;; Action: List tracks in the DB
+;; Action: Fetch object (track) from S3
+;; Action: Write object to temp file
+;; Calculation: Parse metadata from the audio file
+;; Action: Update track metadata in the DB
+
 (defn- track-metadata! [db-conn s3-conn track]
   (println "Syncing metadata:" (:track/path track))
   (let [path (:track/path track)
@@ -42,7 +53,7 @@
 
 (defn metadata! [db-conn s3-conn]
   (let [tracks (db/list-tracks! db-conn)]
-    (pmap #(track-metadata! db-conn s3-conn %) tracks)))
+    (doall (pmap #(track-metadata! db-conn s3-conn %) tracks))))
 
 (comment
 
