@@ -17,12 +17,14 @@
   (jdbc/execute!
    (:db/client conn)
    ["INSERT INTO track
-       (id, path, created_at, updated_at)
+       (id, path, size, created_at, updated_at)
      VALUES
-       (?, ?, ?, ?)
-     ON CONFLICT DO NOTHING"
+       (?, ?, ?, ?, ?)
+     ON CONFLICT (path) DO UPDATE SET
+       size = EXCLUDED.size"
     (:track/id track)
     (:track/path track)
+    (:track/size track)
     (:track/created-at track)
     (:track/updated-at track)]))
 
@@ -75,6 +77,7 @@
    (:db/client conn)
    ["UPDATE track
      SET
+       size = ?,
        track_number = ?,
        duration = ?,
        title = ?,
@@ -85,6 +88,7 @@
        play_count = ?,
        updated_at = ?
      WHERE id = ?"
+    (:track/size track)
     (:track/track-number track)
     (:track/duration track)
     (:track/title track)

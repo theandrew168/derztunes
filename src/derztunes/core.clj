@@ -58,20 +58,17 @@
         (sync/tracks! db-conn s3-conn)
         (println "Syncing metadata...")
         (sync/metadata! db-conn s3-conn)
-        (println "Done syncing.")
-        (shutdown-agents))
+        (println "Done syncing."))
       (contains? flags "-tracks")
       (do
         (println "Syncing tracks...")
         (sync/tracks! db-conn s3-conn)
-        (println "Done syncing.")
-        (shutdown-agents))
+        (println "Done syncing."))
       (contains? flags "-metadata")
       (do
         (println "Syncing metadata...")
         (sync/metadata! db-conn s3-conn)
-        (println "Done syncing.")
-        (shutdown-agents))
+        (println "Done syncing."))
       (contains? flags "-import")
       (do
         (println "Importing playlist...")

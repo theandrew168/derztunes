@@ -8,8 +8,9 @@
   (:import [java.io File FileOutputStream]))
 
 (defn- object->track [object]
-  (let [path (:object/name object)]
-    (model/make-track path)))
+  (let [path (:object/name object)
+        size (:object/size object)]
+    (model/make-track path size)))
 
 (defn tracks! [db-conn s3-conn]
   (let [objects (s3/list-objects! s3-conn)
