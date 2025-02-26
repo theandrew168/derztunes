@@ -32,7 +32,7 @@
 (defn- controls-html []
   [:div.controls
    [:button#shuffle "Shuffle: Off"]
-   [:button#repeat "Repeat: TODO"]])
+   [:button#repeat "Repeat: Off"]])
 
 (defn- index-html [q tracks playlists]
   (page-html

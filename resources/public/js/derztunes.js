@@ -20,6 +20,7 @@ async function getSignedURL(trackID) {
  */
 let trackElement = null;
 let shuffle = false;
+let repeat = false;
 
 /**
  * @type {HTMLAudioElement}
@@ -82,7 +83,10 @@ async function playNextTrack() {
    * @type {HTMLElement | null}
    */
   let next = null;
-  if (shuffle) {
+  if (repeat) {
+    // If repeating, just play the current track again.
+    next = trackElement;
+  } else if (shuffle) {
     // If shuffling, get a random track element.
     next = allTracks[Math.floor(Math.random() * allTracks.length)];
   } else {
@@ -103,6 +107,7 @@ async function playNextTrack() {
  * Select and play the previous track in the list.
  *
  * TODO: How does this work with shuffle? Keep a history of played tracks?
+ * TODO: How does this work with repeat? Keep a history of played tracks?
  */
 async function playPrevTrack() {
   if (!trackElement) {
@@ -166,5 +171,15 @@ shuffleButton.addEventListener("click", async () => {
     shuffleButton.innerHTML = "Shuffle: On";
   } else {
     shuffleButton.innerHTML = "Shuffle: Off";
+  }
+});
+
+// Handle what happens when a user clicks on the "shuffle" button.
+repeatButton.addEventListener("click", async () => {
+  repeat = !repeat;
+  if (repeat) {
+    repeatButton.innerHTML = "Repeat: On";
+  } else {
+    repeatButton.innerHTML = "Repeat: Off";
   }
 });
