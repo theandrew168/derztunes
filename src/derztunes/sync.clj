@@ -12,10 +12,19 @@
         size (:object/size object)]
     (model/make-track path size)))
 
+;; PRESENT:
 ;; Action: List objects (tracks) in S3
 ;; Calculation: Filter objects down to audio files
 ;; Calculation: Convert objects to tracks
-;; Action: Create/update tracks in the DB
+;; Action: Create/update ALL tracks in the DB (slow)
+
+;; FUTURE:
+;; Action: List objects (tracks) in S3
+;; Action: List tracks in the DB
+;; Calculation: Filter objects down to audio files
+;; Calculation: Convert objects to tracks
+;; Calculation: Compare tracks to find only new/updated
+;; Action: Create/update SPECIFIC tracks in the DB (fast, batch)
 
 (defn tracks! [db-conn s3-conn]
   (let [objects (s3/list-objects! s3-conn)
@@ -35,11 +44,19 @@
     (util/m4a-file? path) (m4a/parse-metadata file)
     :else {}))
 
+;; PRESENT:
 ;; Action: List tracks in the DB
 ;; Action: Fetch object (track) from S3
 ;; Action: Write object to temp file
 ;; Calculation: Parse metadata from the audio file
-;; Action: Update track metadata in the DB
+;; Action: Update ALL track metadata in the DB (slow)
+
+;; FUTURE:
+;; Action: List tracks in the DB
+;; Action: Fetch object (track) from S3
+;; Calculation: Parse metadata from the audio data (InputStream, not file)
+;; Calculation: Compare parsed metadata to existing tracks
+;; Action: Update SPECIFIC track metadata in the DB (fast, batch)
 
 (defn- track-metadata! [db-conn s3-conn track]
   (println "Syncing metadata:" (:track/path track))

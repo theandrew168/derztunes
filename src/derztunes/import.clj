@@ -4,6 +4,22 @@
             [derztunes.model :as model]
             [derztunes.util :as util]))
 
+;; PRESENT:
+;; Action: Read playlist from file
+;; Action: Create playlist in the DB (idempotent)
+;; Calculation: Parse playlist into playlist tracks
+;; for each track in playlist:
+;;  Action: Read track from the DB (by path)
+;;  Action: Create playlist track in the DB (idempotent)
+
+;; FUTURE:
+;; Action: Read playlist from file
+;; Action: Create playlist in the DB (idempotent)
+;; Action: List tracks in the DB
+;; Calculation: Parse playlist into playlist tracks
+;; Calculation: Compare playlist tracks to find only new/updated
+;; Action: Create/update SPECIFIC playlist tracks in the DB (fast, batch)
+
 (defn- playlist-track! [db-conn playlist playlist-track]
   (let [number (:playlist-track/number playlist-track)
         path (:playlist-track/path playlist-track)]
