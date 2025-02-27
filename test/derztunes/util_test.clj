@@ -1,5 +1,6 @@
 (ns derztunes.util-test
-  (:require [clojure.test :refer [deftest is testing]]
+  (:require [clojure.java.io :as io]
+            [clojure.test :refer [deftest is testing]]
             [derztunes.util :as util]
             [java-time.api :as jt]))
 
@@ -75,6 +76,12 @@
   (testing "Seconds from now"
     (is (jt/after? (util/seconds-from-now! 60)
                    (jt/instant)))))
+
+(deftest test-stream->bytes
+  (testing "Conversion of a stream to bytes"
+    (let [buf [1 2 3 4]
+          in (io/input-stream (byte-array buf))]
+      (is (= (seq (util/stream->bytes in)) buf)))))
 
 (deftest test-ignore-errors
   (testing "Ignoring errors"

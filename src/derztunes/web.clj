@@ -34,6 +34,12 @@
    [:button#shuffle "Shuffle: Off"]
    [:button#repeat "Repeat: Off"]])
 
+(defn- metadata-html []
+  [:div.metadata "Metadata"])
+
+(defn- settings-html []
+  [:div.settings "Settings?"])
+
 (defn- index-html [q tracks playlists]
   (page-html
    [:body.sans-serif
@@ -68,8 +74,8 @@
        [:ul (map track-html tracks)]]]]
     [:footer.footer
      (controls-html)
-     [:div.metadata "Metadata"]
-     [:div.settings "Settings"]]]))
+     (metadata-html)
+     (settings-html)]]))
 
 (defn index-handler [db-conn]
   (fn [req]

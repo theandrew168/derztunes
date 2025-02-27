@@ -1,6 +1,7 @@
 (ns derztunes.mp3
   (:require [clojure.string :as str]
-            [clojure.java.io :as io])
+            [clojure.java.io :as io]
+            [derztunes.util :as util])
   (:import [com.mpatric.mp3agic Mp3File]))
 
 ;; References:
@@ -55,5 +56,8 @@
   (.getTitle tag)
 
   (parse-metadata (io/file "test.mp3"))
+
+  (def res (io/resource "testdata/test.mp3"))
+  (def buf (util/file->bytes res))
 
   :rcf)

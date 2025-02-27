@@ -1,5 +1,6 @@
 (ns derztunes.util
-  (:require [clojure.string :as str]
+  (:require [clojure.java.io :as io]
+            [clojure.string :as str]
             [java-time.api :as jt]))
 
 (defn in? [coll item]
@@ -41,6 +42,15 @@
 
 (defn seconds-from-now! [seconds]
   (seconds-from (jt/instant) seconds))
+
+(defn stream->bytes [in]
+  (with-open [out (java.io.ByteArrayOutputStream.)]
+    (io/copy in out)
+    (.toByteArray out)))
+
+(defn file->bytes [file]
+  (with-open [in (io/input-stream file)]
+    (stream->bytes in)))
 
 ;; Based on:
 ;; https://stackoverflow.com/a/15715610

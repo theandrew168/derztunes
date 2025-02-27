@@ -12,10 +12,14 @@
 
 ;; TODO: Write my own metadata parsers for MP3 files.
 ;; TODO: Write my own metadata parsers for M4A files.
+;; TODO: Add data for the bottom metadata section.
 ;; TODO: Consider rewriting the tracks table as an HTML table.
+;; TODO: Make the player HUD look good (progress bar, etc).
+;; TODO: Make the player buttons look good.
+;; TODO: Make the control buttons looks good.
+
 ;; TODO: Make the track table sortable by column.
 ;; TODO: Make the track table columns resizable.
-;; TODO: Add data for the bottom metadata section.
 ;; TODO: Use HTMX for searching.
 ;; TODO: Find better tracks for the demo site.
 ;; TODO: Support systemd notifications for successful startups.
