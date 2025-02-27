@@ -1,7 +1,8 @@
 (ns derztunes.util
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
-            [java-time.api :as jt]))
+            [java-time.api :as jt])
+  (:import [java.io File FileOutputStream]))
 
 (defn in? [coll item]
   (some #(= item %) coll))
@@ -42,6 +43,11 @@
 
 (defn seconds-from-now! [seconds]
   (seconds-from (jt/instant) seconds))
+
+(defn stream->tempfile! [in]
+  (let [file (File/createTempFile "derztunes" nil)]
+    (io/copy in file)
+    file))
 
 (defn stream->bytes [in]
   (with-open [out (java.io.ByteArrayOutputStream.)]

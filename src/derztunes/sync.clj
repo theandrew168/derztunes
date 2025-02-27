@@ -4,8 +4,7 @@
             [derztunes.m4a :as m4a]
             [derztunes.model :as model]
             [derztunes.mp3 :as mp3]
-            [derztunes.util :as util])
-  (:import [java.io File FileOutputStream]))
+            [derztunes.util :as util]))
 
 (defn- object->track [object]
   (let [path (:object/name object)
@@ -32,12 +31,6 @@
         tracks (map object->track objects)]
     (doall (pmap #(db/create-track! db-conn %) tracks))))
 
-(defn- object->file [object]
-  (let [file (File/createTempFile "derztunes" nil)
-        stream (FileOutputStream. file)]
-    (.transferTo object stream)
-    file))
-
 (defn- track-metadata [path file]
   (cond
     (util/mp3-file? path) (mp3/parse-metadata file)
@@ -61,12 +54,13 @@
 (defn- track-metadata! [db-conn s3-conn track]
   (println "Syncing metadata:" (:track/path track))
   (let [path (:track/path track)
-        object (s3/get-object! s3-conn path)
-        file (object->file object)
+        stream (s3/get-object! s3-conn path)
+        file (util/stream->tempfile! stream)
         metadata (track-metadata path file)
         track (merge track metadata)]
     (db/update-track! db-conn track)
-    (.delete file)))
+    (.delete file)
+    (.close stream)))
 
 (defn metadata! [db-conn s3-conn]
   (let [tracks (db/list-tracks! db-conn)]
