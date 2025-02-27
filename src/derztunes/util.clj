@@ -2,7 +2,7 @@
   (:require [clojure.java.io :as io]
             [clojure.string :as str]
             [java-time.api :as jt])
-  (:import [java.io File FileOutputStream]))
+  (:import [java.io File]))
 
 (defn in? [coll item]
   (some #(= item %) coll))
