@@ -16,6 +16,30 @@
     [:link {:href "/css/derztunes.css" :rel "stylesheet"}]]
    content])
 
+(defn- player-html []
+  [:div.player
+   [:button#prev "<"]
+   [:button#play "???"]
+   [:button#next ">"]
+   [:input#volume.volume {:type "range" :min "0" :max "1" :value "1" :step "any"}]])
+
+(defn- status-html []
+  [:div.status
+   [:div#title.title "DerzTunes"]
+   [:div#artist.artist "Click on any track to start playing..."]
+   [:div.progress
+    [:div#elapsed.elapsed "0:00"]
+    [:div#bar.bar
+     [:div#filled.filled]
+     [:div#marker.marker]]
+    [:div#remaining.remaining "0:00"]]
+   [:audio#audio {:controls false}]])
+
+(defn- search-html [q]
+  [:div.search
+   [:form {:method "GET" :action "?"}
+    [:input {:type "text" :name "q" :value q :placeholder "Search..."}]]])
+
 (defn- track-html [track]
   [:li.track
    [:input {:type "hidden" :value (:track/id track)}]
@@ -44,18 +68,9 @@
   (page-html
    [:body.sans-serif
     [:header.header
-     [:div.player
-      [:button#prev "<"]
-      [:button#play "???"]
-      [:button#next ">"]
-      [:input#volume.volume {:type "range" :min "0" :max "1" :value "1" :step "any"}]]
-     [:div.status
-      [:a {:href "/"} "DerzTunes"]
-      [:div#title "Click a song to play!"]
-      [:audio#audio {:controls true}]]
-     [:div.search
-      [:form {:method "GET" :action "?"}
-       [:input {:type "text" :name "q" :value q :placeholder "Search..."}]]]]
+     (player-html)
+     (status-html)
+     (search-html q)]
     [:div.content-header
      [:span.playlist-header "Sources"]
      [:span.track-header

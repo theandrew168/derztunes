@@ -1,7 +1,9 @@
 :root {
 	--color-track-light: #ffffff;
 	--color-track-dark: #eef2fd;
+	--color-bar-filled: #acaf9c;
 	--background-metal: linear-gradient(#c8c8c8, #8c8c8c);
+	--background-green: linear-gradient(#eeefe7, #d8dcc3);
 }
 
 body {
@@ -30,9 +32,88 @@ body {
 }
 
 .status {
+	height: 75px;
+	padding: 0.5rem;
+	font-size: 0.75rem;
+	overflow: hidden;
+
+	background: var(--background-green);
+	border-radius: 0.5rem;
+	border-style: inset;
+
 	display: flex;
 	flex-direction: column;
 	align-items: center;
+	gap: 0.25rem;
+}
+
+.status .title,
+.status .artist {
+	width: 100%;
+	text-align: center;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+.progress {
+	width: 100%;
+
+	display: flex;
+	flex-direction: row;
+	align-items: center;
+	gap: 0.25rem;
+}
+
+.elapsed,
+.remaining {
+	/* Slightly more than the width of "-00:00". */
+	width: 40px;
+}
+
+.elapsed {
+	text-align: right;
+}
+
+.remaining {
+	text-align: left;
+}
+
+.bar {
+	flex-grow: 1;
+	border: 1px solid black;
+
+	display: flex;
+}
+
+.filled {
+	/* Is this background fill color worth it? Looks kinda bad with the marker. */
+    /* background: var(--color-bar-filled); */
+
+	/* This width value controls the progress bar. */
+    width: 0%;
+}
+
+/* This magic creates the progress bar diamond marker. */
+/* Ref: https://css-tricks.com/the-shapes-of-css/#aa-diamond-square-shape-via-joseph-silber */
+.marker {
+	width: 0;
+	height: 0;
+	border: 5px solid transparent;
+	border-bottom-color: black;
+	position: relative;
+	top: -5px;
+}
+
+.marker:after {
+	content: '';
+	position: absolute;
+	left: -5px;
+	top: 5px;
+	width: 0;
+	height: 0;
+	border: 5px solid transparent;
+	border-top-color: black;
 }
 
 .search {
@@ -42,6 +123,7 @@ body {
 
 .search input {
 	border-radius: 4rem;
+	border-style: inset;
 	padding: 0.5rem;
 }
 

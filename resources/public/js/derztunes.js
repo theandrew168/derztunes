@@ -20,6 +20,9 @@ async function getSignedURL(trackID) {
  */
 let trackElement = null;
 
+let elapsed = 0;
+let duration = 0;
+
 let shuffle = false;
 let repeat = false;
 
@@ -60,7 +63,26 @@ const shuffleButton = document.querySelector("#shuffle");
 const repeatButton = document.querySelector("#repeat");
 
 const titleElement = document.querySelector("#title");
+const artistElement = document.querySelector("#artist");
+const elapsedElement = document.querySelector("#elapsed");
+const remainingElement = document.querySelector("#remaining");
+const barElement = document.querySelector("#bar");
+const filledElement = document.querySelector("#filled");
 const allTracks = document.querySelectorAll(".track");
+
+function trackTitle(trackElement) {
+  return trackElement.querySelector(".title").textContent ?? "Unknown Track";
+}
+
+function trackArtist(trackElement) {
+  return trackElement.querySelector(".artist").textContent ?? "Unknown Artist";
+}
+
+function formatDurationAsMinutesSeconds(duration) {
+  const minutes = Math.floor(duration / 60);
+  const seconds = Math.floor(duration % 60);
+  return `${minutes}:${seconds.toString().padStart(2, "0")}`;
+}
 
 /**
  * Play the currently selected track and update titles.
@@ -80,10 +102,18 @@ async function playTrack() {
   playButton.innerHTML = "Pause";
 
   // Grab the track's title and update the player title and page title.
-  const title =
-    trackElement.querySelector("span").textContent ?? "Unknown Track";
+  const title = trackTitle(trackElement);
   titleElement.innerHTML = title;
   document.title = title;
+
+  // Grab the track's artist and update the player artist.
+  const artist = trackArtist(trackElement);
+  artistElement.innerHTML = artist;
+
+  // Reset the time display and progress bar.
+  elapsedElement.innerHTML = "0:00";
+  remainingElement.innerHTML = "0:00";
+  filledElement.style.width = "0%";
 }
 
 /**
@@ -94,9 +124,20 @@ async function resetTrack() {
   audioElement.load();
   audioElement.pause();
 
+  // Reset the player title and page title.
   playButton.innerHTML = "???";
   titleElement.innerHTML = "DerzTunes";
   document.title = "DerzTunes";
+
+  // Reset the player artist.
+  artistElement.innerHTML = "Click on any track to start playing...";
+
+  // Reset the time display and progress bar.
+  elapsed = 0;
+  duration = 0;
+  elapsedElement.innerHTML = formatDurationAsMinutesSeconds(elapsed);
+  remainingElement.innerHTML = formatDurationAsMinutesSeconds(duration);
+  filledElement.style.width = "0%";
 }
 
 /**
@@ -158,6 +199,34 @@ audioElement.addEventListener("ended", async () => {
   await playNextTrack();
 });
 
+// Handle what happens when a track's duration changes.
+audioElement.addEventListener("durationchange", async (event) => {
+  if (!audioElement.duration) {
+    return;
+  }
+
+  duration = audioElement.duration;
+  remainingElement.innerHTML = "-" + formatDurationAsMinutesSeconds(duration);
+});
+
+// Handle what happens when a track makes progress.
+audioElement.addEventListener("timeupdate", async () => {
+  elapsed = audioElement.currentTime;
+  elapsedElement.innerHTML = formatDurationAsMinutesSeconds(elapsed);
+
+  if (!duration) {
+    return;
+  }
+
+  // Calculate the remaining time.
+  const remaining = duration - elapsed;
+  remainingElement.innerHTML = "-" + formatDurationAsMinutesSeconds(remaining);
+
+  // Update the progress bar.
+  const percent = (elapsed / duration) * 100;
+  filledElement.style.width = percent + "%";
+});
+
 // Handle what happens when the volume changes.
 volumeElement.addEventListener("input", async (event) => {
   audioElement.volume = event.target.value;
@@ -187,6 +256,29 @@ nextButton.addEventListener("click", async () => {
 // Handle what happens when a user cllcks on the "prev track" button.
 prevButton.addEventListener("click", async () => {
   await playPrevTrack();
+});
+
+// Handle what happens when a user clicks on the progress bar.
+barElement.addEventListener("click", async (event) => {
+  // Calculate the elapsed time based on the click position.
+  const rect = event.target.getBoundingClientRect();
+  const x = event.clientX - rect.left;
+  const width = rect.width;
+  const percent = x / width;
+
+  // Update the progress bar.
+  filledElement.style.width = percent * 100 + "%";
+
+  // Calculate the elapsed time and update the time display.
+  elapsed = percent * duration;
+  elapsedElement.innerHTML = formatDurationAsMinutesSeconds(elapsed);
+
+  // Calculate the remaining time and update the time display.
+  const remaining = duration - elapsed;
+  remainingElement.innerHTML = "-" + formatDurationAsMinutesSeconds(remaining);
+
+  // Update the audio element's currentTime (this actually changes the player's state).
+  audioElement.currentTime = elapsed;
 });
 
 // Handle what happens when a user clicks on a track.
