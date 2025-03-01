@@ -19,6 +19,7 @@ async function getSignedURL(trackID) {
  * @type {HTMLElement | null}
  */
 let trackElement = null;
+
 let shuffle = false;
 let repeat = false;
 
@@ -26,12 +27,39 @@ let repeat = false;
  * @type {HTMLAudioElement}
  */
 const audioElement = document.querySelector("#audio");
-const titleElement = document.querySelector("#title");
+
+/**
+ * @type {HTMLInputElement}
+ */
+const volumeElement = document.querySelector("#volume");
+volumeElement.value = audioElement.volume;
+
+/**
+ * @type {HTMLButtonElement}
+ */
 const playButton = document.querySelector("#play");
+
+/**
+ * @type {HTMLButtonElement}
+ */
 const nextButton = document.querySelector("#next");
+
+/**
+ * @type {HTMLButtonElement}
+ */
 const prevButton = document.querySelector("#prev");
+
+/**
+ * @type {HTMLButtonElement}
+ */
 const shuffleButton = document.querySelector("#shuffle");
+
+/**
+ * @type {HTMLButtonElement}
+ */
 const repeatButton = document.querySelector("#repeat");
+
+const titleElement = document.querySelector("#title");
 const allTracks = document.querySelectorAll(".track");
 
 /**
@@ -128,6 +156,11 @@ async function playPrevTrack() {
 // Handle what happens when a track finishes playing.
 audioElement.addEventListener("ended", async () => {
   await playNextTrack();
+});
+
+// Handle what happens when the volume changes.
+volumeElement.addEventListener("input", async (event) => {
+  audioElement.volume = event.target.value;
 });
 
 // Handle what happens when a user cllcks on the play / pause button.

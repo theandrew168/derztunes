@@ -25,6 +25,10 @@ body {
 	justify-content: center;
 }
 
+.volume {
+	margin-left: 1rem;
+}
+
 .status {
 	display: flex;
 	flex-direction: column;

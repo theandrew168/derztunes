@@ -47,7 +47,8 @@
      [:div.player
       [:button#prev "<"]
       [:button#play "???"]
-      [:button#next ">"]]
+      [:button#next ">"]
+      [:input#volume.volume {:type "range" :min "0" :max "1" :value "1" :step "any"}]]
      [:div.status
       [:a {:href "/"} "DerzTunes"]
       [:div#title "Click a song to play!"]
