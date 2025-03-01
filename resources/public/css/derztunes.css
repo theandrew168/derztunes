@@ -123,7 +123,6 @@ body {
 
 .tracks {
 	background-color: white;
-	/* border-left: 1px solid black; */
 
 	/* Without this, the track table might not fill the page width. */
 	flex-grow: 1;
@@ -154,6 +153,9 @@ body {
 .track .artist,
 .track .album,
 .track .play-count {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
 	padding: 0.25rem;
 }
 

@@ -6,7 +6,10 @@
 
 ;; References:
 ;; https://github.com/mpatric/mp3agic
+;; https://github.com/mpatric/mp3agic/blob/master/src/main/java/com/mpatric/mp3agic/Mp3File.java
 ;; https://github.com/mpatric/mp3agic-examples/blob/master/src/main/java/com/mpatric/mp3agic/app/Mp3Details.java
+;; http://mpgedit.org/mpgedit/mpeg_format/mpeghdr.htm
+;; https://id3.org/id3v2.3.0
 
 (defn- has-slash? [s]
   (str/includes? s "/"))
