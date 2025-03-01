@@ -129,6 +129,9 @@ body {
 
 	/* Without this, the track table cannot be scrolled. */
 	overflow: auto;
+
+	/* This prevents the overscroll "rubber-banding" effect. */
+	overscroll-behavior-y: none;
 }
 
 .track {
