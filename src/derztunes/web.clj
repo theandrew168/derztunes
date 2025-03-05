@@ -18,9 +18,12 @@
 
 (defn- player-html []
   [:div.player
-   [:button#prev "<"]
-   [:button#play "???"]
-   [:button#next ">"]
+   [:button#prev.prev-button
+    [:image.prev-icon {:src "/img/backward.svg"}]]
+   [:button#play.play-button
+    [:image.play-icon {:src "/img/play.svg"}]]
+   [:button#next.next-button
+    [:image.next-icon {:src "/img/forward.svg"}]]
    [:input#volume.volume {:type "range" :min "0" :max "1" :value "1" :step "any"}]])
 
 (defn- status-html []
@@ -61,9 +64,6 @@
 (defn- metadata-html []
   [:div.metadata "Metadata"])
 
-(defn- settings-html []
-  [:div.settings "Settings?"])
-
 (defn- index-html [q tracks playlists]
   (page-html
    [:body.sans-serif
@@ -90,8 +90,7 @@
        [:ul (map track-html tracks)]]]]
     [:footer.footer
      (controls-html)
-     (metadata-html)
-     (settings-html)]]))
+     (metadata-html)]]))
 
 (defn index-handler [db-conn]
   (fn [req]

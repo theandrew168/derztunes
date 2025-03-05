@@ -24,7 +24,32 @@ body {
 
 .player {
 	display: flex;
+	align-items: center;
 	justify-content: center;
+	gap: 0.25rem;
+}
+
+.prev-button,
+.play-button,
+.next-button {
+	display: flex;
+	align-items: center;
+	justify-content: center;
+	border: 1px solid gray;
+	border-radius: 4rem;
+	padding: 0.5rem;
+}
+
+.prev-icon,
+.play-icon,
+.next-icon {
+	height: 25px;
+	width: 25px;
+}
+
+.play-icon {
+	height: 35px;
+	width: 35px;
 }
 
 .volume {
@@ -267,15 +292,10 @@ body {
 
 .controls {
 	display: flex;
-	justify-content: center;
+	margin-left: 2rem;
 }
 
 .metadata {
-	display: flex;
-	justify-content: center;
-}
-
-.settings {
 	display: flex;
 	justify-content: center;
 }

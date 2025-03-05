@@ -70,14 +70,26 @@ const barElement = document.querySelector("#bar");
 const filledElement = document.querySelector("#filled");
 const allTracks = document.querySelectorAll(".track");
 
-function trackTitle(trackElement) {
+/**
+ * @param {HTMLElement} trackElement
+ * @returns {string}
+ */
+function getTrackTitle(trackElement) {
   return trackElement.querySelector(".title").textContent ?? "Unknown Track";
 }
 
-function trackArtist(trackElement) {
+/**
+ * @param {HTMLElement} trackElement
+ * @returns {string}
+ */
+function getTrackArtist(trackElement) {
   return trackElement.querySelector(".artist").textContent ?? "Unknown Artist";
 }
 
+/**
+ * @param {number} duration
+ * @returns {string}
+ */
 function formatDurationAsMinutesSeconds(duration) {
   const minutes = Math.floor(duration / 60);
   const seconds = Math.floor(duration % 60);
@@ -99,15 +111,15 @@ async function playTrack() {
   audioElement.load();
   audioElement.play();
 
-  playButton.innerHTML = "Pause";
+  playButton.childNodes[0].src = "/img/pause.svg";
 
   // Grab the track's title and update the player title and page title.
-  const title = trackTitle(trackElement);
+  const title = getTrackTitle(trackElement);
   titleElement.innerHTML = title;
   document.title = title;
 
   // Grab the track's artist and update the player artist.
-  const artist = trackArtist(trackElement);
+  const artist = getTrackArtist(trackElement);
   artistElement.innerHTML = artist;
 
   // Reset the time display and progress bar.
@@ -125,7 +137,7 @@ async function resetTrack() {
   audioElement.pause();
 
   // Reset the player title and page title.
-  playButton.innerHTML = "???";
+  playButton.childNodes[0].src = "/img/play.svg";
   titleElement.innerHTML = "DerzTunes";
   document.title = "DerzTunes";
 
@@ -236,13 +248,17 @@ volumeElement.addEventListener("input", async (event) => {
 playButton.addEventListener(
   "click",
   () => {
+    if (!trackElement) {
+      return;
+    }
+
     // Toggle the play / pause state.
     if (audioElement.paused) {
       audioElement.play();
-      playButton.innerHTML = "Pause";
+      playButton.childNodes[0].src = "/img/pause.svg";
     } else {
       audioElement.pause();
-      playButton.innerHTML = "Play";
+      playButton.childNodes[0].src = "/img/play.svg";
     }
   },
   false
@@ -250,16 +266,28 @@ playButton.addEventListener(
 
 // Handle what happens when a user cllcks on the "next track" button.
 nextButton.addEventListener("click", async () => {
+  if (!trackElement) {
+    return;
+  }
+
   await playNextTrack();
 });
 
 // Handle what happens when a user cllcks on the "prev track" button.
 prevButton.addEventListener("click", async () => {
+  if (!trackElement) {
+    return;
+  }
+
   await playPrevTrack();
 });
 
 // Handle what happens when a user clicks on the progress bar.
 barElement.addEventListener("click", async (event) => {
+  if (!trackElement) {
+    return;
+  }
+
   // Calculate the elapsed time based on the click position.
   const rect = event.target.getBoundingClientRect();
   const x = event.clientX - rect.left;
