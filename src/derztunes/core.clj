@@ -14,8 +14,6 @@
 ;; TODO: Write my own metadata parsers for M4A files.
 ;; TODO: Add data for the bottom metadata section.
 ;; TODO: Consider rewriting the tracks table as an HTML table.
-;; TODO: Make the player buttons look good.
-;; TODO: Make the control buttons looks good.
 
 ;; TODO: Make the track table sortable by column.
 ;; TODO: Make the track table columns resizable.
