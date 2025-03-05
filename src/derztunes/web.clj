@@ -13,7 +13,9 @@
     [:script {:src "/js/derztunes.js" :defer true}]
     [:link {:href "/css/reset.css" :rel "stylesheet"}]
     [:link {:href "/css/fonts.css" :rel "stylesheet"}]
-    [:link {:href "/css/derztunes.css" :rel "stylesheet"}]]
+    [:link {:href "/css/derztunes.css" :rel "stylesheet"}]
+    [:link {:href "/img/shuffle-on.svg" :rel "preload" :as "image"}]
+    [:link {:href "/img/repeat-on.svg" :rel "preload" :as "image"}]]
    content])
 
 (defn- player-html []
@@ -58,8 +60,10 @@
 
 (defn- controls-html []
   [:div.controls
-   [:button#shuffle "Shuffle: Off"]
-   [:button#repeat "Repeat: Off"]])
+   [:button#shuffle.shuffle-button
+    [:image.shuffle-icon {:src "/img/shuffle-off.svg"}]]
+   [:button#repeat.repeat-button
+    [:image.repeat-icon {:src "/img/repeat-off.svg"}]]])
 
 (defn- metadata-html []
   [:div.metadata "Metadata"])

@@ -111,7 +111,7 @@ async function playTrack() {
   audioElement.load();
   audioElement.play();
 
-  playButton.childNodes[0].src = "/img/pause.svg";
+  playButton.children[0].src = "/img/pause.svg";
 
   // Grab the track's title and update the player title and page title.
   const title = getTrackTitle(trackElement);
@@ -137,7 +137,7 @@ async function resetTrack() {
   audioElement.pause();
 
   // Reset the player title and page title.
-  playButton.childNodes[0].src = "/img/play.svg";
+  playButton.children[0].src = "/img/play.svg";
   titleElement.innerHTML = "DerzTunes";
   document.title = "DerzTunes";
 
@@ -255,10 +255,10 @@ playButton.addEventListener(
     // Toggle the play / pause state.
     if (audioElement.paused) {
       audioElement.play();
-      playButton.childNodes[0].src = "/img/pause.svg";
+      playButton.children[0].src = "/img/pause.svg";
     } else {
       audioElement.pause();
-      playButton.childNodes[0].src = "/img/play.svg";
+      playButton.children[0].src = "/img/play.svg";
     }
   },
   false
@@ -321,9 +321,9 @@ document.querySelectorAll(".track").forEach((e) => {
 shuffleButton.addEventListener("click", async () => {
   shuffle = !shuffle;
   if (shuffle) {
-    shuffleButton.innerHTML = "Shuffle: On";
+    shuffleButton.children[0].src = "/img/shuffle-on.svg";
   } else {
-    shuffleButton.innerHTML = "Shuffle: Off";
+    shuffleButton.children[0].src = "/img/shuffle-off.svg";
   }
 });
 
@@ -331,8 +331,8 @@ shuffleButton.addEventListener("click", async () => {
 repeatButton.addEventListener("click", async () => {
   repeat = !repeat;
   if (repeat) {
-    repeatButton.innerHTML = "Repeat: On";
+    repeatButton.children[0].src = "/img/repeat-on.svg";
   } else {
-    repeatButton.innerHTML = "Repeat: Off";
+    repeatButton.children[0].src = "/img/repeat-off.svg";
   }
 });
